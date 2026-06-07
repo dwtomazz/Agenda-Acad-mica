@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as AvisosRouteImport } from './routes/avisos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrabalhosNovoRouteImport } from './routes/trabalhos.novo'
 import { Route as AvisosNovoRouteImport } from './routes/avisos.novo'
 
 const TrabalhosRoute = TrabalhosRouteImport.update({
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrabalhosNovoRoute = TrabalhosNovoRouteImport.update({
+  id: '/novo',
+  path: '/novo',
+  getParentRoute: () => TrabalhosRoute,
+} as any)
 const AvisosNovoRoute = AvisosNovoRouteImport.update({
   id: '/novo',
   path: '/novo',
@@ -59,8 +65,9 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/trabalhos': typeof TrabalhosRoute
+  '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
+  '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,8 +75,9 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/trabalhos': typeof TrabalhosRoute
+  '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
+  '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +86,9 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/trabalhos': typeof TrabalhosRoute
+  '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
+  '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
+    | '/trabalhos/novo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
+    | '/trabalhos/novo'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
+    | '/trabalhos/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,7 +129,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
-  TrabalhosRoute: typeof TrabalhosRoute
+  TrabalhosRoute: typeof TrabalhosRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -164,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trabalhos/novo': {
+      id: '/trabalhos/novo'
+      path: '/novo'
+      fullPath: '/trabalhos/novo'
+      preLoaderRoute: typeof TrabalhosNovoRouteImport
+      parentRoute: typeof TrabalhosRoute
+    }
     '/avisos/novo': {
       id: '/avisos/novo'
       path: '/novo'
@@ -185,13 +204,25 @@ const AvisosRouteChildren: AvisosRouteChildren = {
 const AvisosRouteWithChildren =
   AvisosRoute._addFileChildren(AvisosRouteChildren)
 
+interface TrabalhosRouteChildren {
+  TrabalhosNovoRoute: typeof TrabalhosNovoRoute
+}
+
+const TrabalhosRouteChildren: TrabalhosRouteChildren = {
+  TrabalhosNovoRoute: TrabalhosNovoRoute,
+}
+
+const TrabalhosRouteWithChildren = TrabalhosRoute._addFileChildren(
+  TrabalhosRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AvisosRoute: AvisosRouteWithChildren,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
-  TrabalhosRoute: TrabalhosRoute,
+  TrabalhosRoute: TrabalhosRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
