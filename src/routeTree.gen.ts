@@ -9,38 +9,258 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrabalhosRouteImport } from './routes/trabalhos'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SairRouteImport } from './routes/sair'
+import { Route as NotasRouteImport } from './routes/notas'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as ContaRouteImport } from './routes/conta'
+import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as AvisosRouteImport } from './routes/avisos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrabalhosNovoRouteImport } from './routes/trabalhos.novo'
+import { Route as CalendarioFiltrosRouteImport } from './routes/calendario.filtros'
+import { Route as AvisosNovoRouteImport } from './routes/avisos.novo'
 
+const TrabalhosRoute = TrabalhosRouteImport.update({
+  id: '/trabalhos',
+  path: '/trabalhos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SairRoute = SairRouteImport.update({
+  id: '/sair',
+  path: '/sair',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotasRoute = NotasRouteImport.update({
+  id: '/notas',
+  path: '/notas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContaRoute = ContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AvisosRoute = AvisosRouteImport.update({
+  id: '/avisos',
+  path: '/avisos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrabalhosNovoRoute = TrabalhosNovoRouteImport.update({
+  id: '/novo',
+  path: '/novo',
+  getParentRoute: () => TrabalhosRoute,
+} as any)
+const CalendarioFiltrosRoute = CalendarioFiltrosRouteImport.update({
+  id: '/filtros',
+  path: '/filtros',
+  getParentRoute: () => CalendarioRoute,
+} as any)
+const AvisosNovoRoute = AvisosNovoRouteImport.update({
+  id: '/novo',
+  path: '/novo',
+  getParentRoute: () => AvisosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/avisos': typeof AvisosRouteWithChildren
+  '/calendario': typeof CalendarioRouteWithChildren
+  '/conta': typeof ContaRoute
+  '/home': typeof HomeRoute
+  '/login': typeof LoginRoute
+  '/notas': typeof NotasRoute
+  '/sair': typeof SairRoute
+  '/signup': typeof SignupRoute
+  '/trabalhos': typeof TrabalhosRouteWithChildren
+  '/avisos/novo': typeof AvisosNovoRoute
+  '/calendario/filtros': typeof CalendarioFiltrosRoute
+  '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/avisos': typeof AvisosRouteWithChildren
+  '/calendario': typeof CalendarioRouteWithChildren
+  '/conta': typeof ContaRoute
+  '/home': typeof HomeRoute
+  '/login': typeof LoginRoute
+  '/notas': typeof NotasRoute
+  '/sair': typeof SairRoute
+  '/signup': typeof SignupRoute
+  '/trabalhos': typeof TrabalhosRouteWithChildren
+  '/avisos/novo': typeof AvisosNovoRoute
+  '/calendario/filtros': typeof CalendarioFiltrosRoute
+  '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/avisos': typeof AvisosRouteWithChildren
+  '/calendario': typeof CalendarioRouteWithChildren
+  '/conta': typeof ContaRoute
+  '/home': typeof HomeRoute
+  '/login': typeof LoginRoute
+  '/notas': typeof NotasRoute
+  '/sair': typeof SairRoute
+  '/signup': typeof SignupRoute
+  '/trabalhos': typeof TrabalhosRouteWithChildren
+  '/avisos/novo': typeof AvisosNovoRoute
+  '/calendario/filtros': typeof CalendarioFiltrosRoute
+  '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/avisos'
+    | '/calendario'
+    | '/conta'
+    | '/home'
+    | '/login'
+    | '/notas'
+    | '/sair'
+    | '/signup'
+    | '/trabalhos'
+    | '/avisos/novo'
+    | '/calendario/filtros'
+    | '/trabalhos/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/avisos'
+    | '/calendario'
+    | '/conta'
+    | '/home'
+    | '/login'
+    | '/notas'
+    | '/sair'
+    | '/signup'
+    | '/trabalhos'
+    | '/avisos/novo'
+    | '/calendario/filtros'
+    | '/trabalhos/novo'
+  id:
+    | '__root__'
+    | '/'
+    | '/avisos'
+    | '/calendario'
+    | '/conta'
+    | '/home'
+    | '/login'
+    | '/notas'
+    | '/sair'
+    | '/signup'
+    | '/trabalhos'
+    | '/avisos/novo'
+    | '/calendario/filtros'
+    | '/trabalhos/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AvisosRoute: typeof AvisosRouteWithChildren
+  CalendarioRoute: typeof CalendarioRouteWithChildren
+  ContaRoute: typeof ContaRoute
+  HomeRoute: typeof HomeRoute
+  LoginRoute: typeof LoginRoute
+  NotasRoute: typeof NotasRoute
+  SairRoute: typeof SairRoute
+  SignupRoute: typeof SignupRoute
+  TrabalhosRoute: typeof TrabalhosRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trabalhos': {
+      id: '/trabalhos'
+      path: '/trabalhos'
+      fullPath: '/trabalhos'
+      preLoaderRoute: typeof TrabalhosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sair': {
+      id: '/sair'
+      path: '/sair'
+      fullPath: '/sair'
+      preLoaderRoute: typeof SairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notas': {
+      id: '/notas'
+      path: '/notas'
+      fullPath: '/notas'
+      preLoaderRoute: typeof NotasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conta': {
+      id: '/conta'
+      path: '/conta'
+      fullPath: '/conta'
+      preLoaderRoute: typeof ContaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/avisos': {
+      id: '/avisos'
+      path: '/avisos'
+      fullPath: '/avisos'
+      preLoaderRoute: typeof AvisosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +268,77 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trabalhos/novo': {
+      id: '/trabalhos/novo'
+      path: '/novo'
+      fullPath: '/trabalhos/novo'
+      preLoaderRoute: typeof TrabalhosNovoRouteImport
+      parentRoute: typeof TrabalhosRoute
+    }
+    '/calendario/filtros': {
+      id: '/calendario/filtros'
+      path: '/filtros'
+      fullPath: '/calendario/filtros'
+      preLoaderRoute: typeof CalendarioFiltrosRouteImport
+      parentRoute: typeof CalendarioRoute
+    }
+    '/avisos/novo': {
+      id: '/avisos/novo'
+      path: '/novo'
+      fullPath: '/avisos/novo'
+      preLoaderRoute: typeof AvisosNovoRouteImport
+      parentRoute: typeof AvisosRoute
+    }
   }
 }
 
+interface AvisosRouteChildren {
+  AvisosNovoRoute: typeof AvisosNovoRoute
+}
+
+const AvisosRouteChildren: AvisosRouteChildren = {
+  AvisosNovoRoute: AvisosNovoRoute,
+}
+
+const AvisosRouteWithChildren =
+  AvisosRoute._addFileChildren(AvisosRouteChildren)
+
+interface CalendarioRouteChildren {
+  CalendarioFiltrosRoute: typeof CalendarioFiltrosRoute
+}
+
+const CalendarioRouteChildren: CalendarioRouteChildren = {
+  CalendarioFiltrosRoute: CalendarioFiltrosRoute,
+}
+
+const CalendarioRouteWithChildren = CalendarioRoute._addFileChildren(
+  CalendarioRouteChildren,
+)
+
+interface TrabalhosRouteChildren {
+  TrabalhosNovoRoute: typeof TrabalhosNovoRoute
+}
+
+const TrabalhosRouteChildren: TrabalhosRouteChildren = {
+  TrabalhosNovoRoute: TrabalhosNovoRoute,
+}
+
+const TrabalhosRouteWithChildren = TrabalhosRoute._addFileChildren(
+  TrabalhosRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AvisosRoute: AvisosRouteWithChildren,
+  CalendarioRoute: CalendarioRouteWithChildren,
+  ContaRoute: ContaRoute,
+  HomeRoute: HomeRoute,
+  LoginRoute: LoginRoute,
+  NotasRoute: NotasRoute,
+  SairRoute: SairRoute,
+  SignupRoute: SignupRoute,
+  TrabalhosRoute: TrabalhosRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
