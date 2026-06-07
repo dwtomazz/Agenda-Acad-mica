@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrabalhosRouteImport } from './routes/trabalhos'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as NotasRouteImport } from './routes/notas'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as CalendarioRouteImport } from './routes/calendario'
@@ -28,6 +29,11 @@ const TrabalhosRoute = TrabalhosRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotasRoute = NotasRouteImport.update({
+  id: '/notas',
+  path: '/notas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/calendario': typeof CalendarioRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
+  '/notas': typeof NotasRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/calendario': typeof CalendarioRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
+  '/notas': typeof NotasRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/calendario': typeof CalendarioRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
+  '/notas': typeof NotasRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/home'
     | '/login'
+    | '/notas'
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/home'
     | '/login'
+    | '/notas'
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/home'
     | '/login'
+    | '/notas'
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   CalendarioRoute: typeof CalendarioRouteWithChildren
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
+  NotasRoute: typeof NotasRoute
   SignupRoute: typeof SignupRoute
   TrabalhosRoute: typeof TrabalhosRouteWithChildren
 }
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notas': {
+      id: '/notas'
+      path: '/notas'
+      fullPath: '/notas'
+      preLoaderRoute: typeof NotasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -273,6 +293,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarioRoute: CalendarioRouteWithChildren,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
+  NotasRoute: NotasRoute,
   SignupRoute: SignupRoute,
   TrabalhosRoute: TrabalhosRouteWithChildren,
 }
