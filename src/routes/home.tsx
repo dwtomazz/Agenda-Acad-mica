@@ -25,10 +25,7 @@ function HomePage() {
 function Section({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
     <section className="mb-5 rounded-2xl border border-border bg-card p-5">
-      <div className="flex items-center gap-3 pb-3">
-        {icon}
-        <h2 className="text-lg font-bold">{title}</h2>
-      </div>
+      <div className="flex items-center gap-3 pb-3">{icon}<h2 className="text-lg font-bold">{title}</h2></div>
       <div className="divide-y divide-border">{children}</div>
     </section>
   );
