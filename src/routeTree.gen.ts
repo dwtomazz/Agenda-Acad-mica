@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrabalhosRouteImport } from './routes/trabalhos'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SairRouteImport } from './routes/sair'
 import { Route as NotasRouteImport } from './routes/notas'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
@@ -30,6 +31,11 @@ const TrabalhosRoute = TrabalhosRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SairRoute = SairRouteImport.update({
+  id: '/sair',
+  path: '/sair',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotasRoute = NotasRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/notas': typeof NotasRoute
+  '/sair': typeof SairRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/notas': typeof NotasRoute
+  '/sair': typeof SairRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/notas': typeof NotasRoute
+  '/sair': typeof SairRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/notas'
+    | '/sair'
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/notas'
+    | '/sair'
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/notas'
+    | '/sair'
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   NotasRoute: typeof NotasRoute
+  SairRoute: typeof SairRoute
   SignupRoute: typeof SignupRoute
   TrabalhosRoute: typeof TrabalhosRouteWithChildren
 }
@@ -197,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sair': {
+      id: '/sair'
+      path: '/sair'
+      fullPath: '/sair'
+      preLoaderRoute: typeof SairRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notas': {
@@ -315,6 +335,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   NotasRoute: NotasRoute,
+  SairRoute: SairRoute,
   SignupRoute: SignupRoute,
   TrabalhosRoute: TrabalhosRouteWithChildren,
 }
