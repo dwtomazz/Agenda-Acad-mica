@@ -17,6 +17,7 @@ import { Route as CalendarioRouteImport } from './routes/calendario'
 import { Route as AvisosRouteImport } from './routes/avisos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrabalhosNovoRouteImport } from './routes/trabalhos.novo'
+import { Route as CalendarioFiltrosRouteImport } from './routes/calendario.filtros'
 import { Route as AvisosNovoRouteImport } from './routes/avisos.novo'
 
 const TrabalhosRoute = TrabalhosRouteImport.update({
@@ -59,6 +60,11 @@ const TrabalhosNovoRoute = TrabalhosNovoRouteImport.update({
   path: '/novo',
   getParentRoute: () => TrabalhosRoute,
 } as any)
+const CalendarioFiltrosRoute = CalendarioFiltrosRouteImport.update({
+  id: '/filtros',
+  path: '/filtros',
+  getParentRoute: () => CalendarioRoute,
+} as any)
 const AvisosNovoRoute = AvisosNovoRouteImport.update({
   id: '/novo',
   path: '/novo',
@@ -68,35 +74,38 @@ const AvisosNovoRoute = AvisosNovoRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRouteWithChildren
-  '/calendario': typeof CalendarioRoute
+  '/calendario': typeof CalendarioRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
+  '/calendario/filtros': typeof CalendarioFiltrosRoute
   '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRouteWithChildren
-  '/calendario': typeof CalendarioRoute
+  '/calendario': typeof CalendarioRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
+  '/calendario/filtros': typeof CalendarioFiltrosRoute
   '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRouteWithChildren
-  '/calendario': typeof CalendarioRoute
+  '/calendario': typeof CalendarioRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/trabalhos': typeof TrabalhosRouteWithChildren
   '/avisos/novo': typeof AvisosNovoRoute
+  '/calendario/filtros': typeof CalendarioFiltrosRoute
   '/trabalhos/novo': typeof TrabalhosNovoRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
+    | '/calendario/filtros'
     | '/trabalhos/novo'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
+    | '/calendario/filtros'
     | '/trabalhos/novo'
   id:
     | '__root__'
@@ -132,13 +143,14 @@ export interface FileRouteTypes {
     | '/signup'
     | '/trabalhos'
     | '/avisos/novo'
+    | '/calendario/filtros'
     | '/trabalhos/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AvisosRoute: typeof AvisosRouteWithChildren
-  CalendarioRoute: typeof CalendarioRoute
+  CalendarioRoute: typeof CalendarioRouteWithChildren
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
@@ -203,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrabalhosNovoRouteImport
       parentRoute: typeof TrabalhosRoute
     }
+    '/calendario/filtros': {
+      id: '/calendario/filtros'
+      path: '/filtros'
+      fullPath: '/calendario/filtros'
+      preLoaderRoute: typeof CalendarioFiltrosRouteImport
+      parentRoute: typeof CalendarioRoute
+    }
     '/avisos/novo': {
       id: '/avisos/novo'
       path: '/novo'
@@ -224,6 +243,18 @@ const AvisosRouteChildren: AvisosRouteChildren = {
 const AvisosRouteWithChildren =
   AvisosRoute._addFileChildren(AvisosRouteChildren)
 
+interface CalendarioRouteChildren {
+  CalendarioFiltrosRoute: typeof CalendarioFiltrosRoute
+}
+
+const CalendarioRouteChildren: CalendarioRouteChildren = {
+  CalendarioFiltrosRoute: CalendarioFiltrosRoute,
+}
+
+const CalendarioRouteWithChildren = CalendarioRoute._addFileChildren(
+  CalendarioRouteChildren,
+)
+
 interface TrabalhosRouteChildren {
   TrabalhosNovoRoute: typeof TrabalhosNovoRoute
 }
@@ -239,7 +270,7 @@ const TrabalhosRouteWithChildren = TrabalhosRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AvisosRoute: AvisosRouteWithChildren,
-  CalendarioRoute: CalendarioRoute,
+  CalendarioRoute: CalendarioRouteWithChildren,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
