@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as AvisosRouteImport } from './routes/avisos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AvisosNovoRouteImport } from './routes/avisos.novo'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -40,40 +41,55 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AvisosNovoRoute = AvisosNovoRouteImport.update({
+  id: '/novo',
+  path: '/novo',
+  getParentRoute: () => AvisosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/avisos': typeof AvisosRoute
+  '/avisos': typeof AvisosRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/avisos/novo': typeof AvisosNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/avisos': typeof AvisosRoute
+  '/avisos': typeof AvisosRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/avisos/novo': typeof AvisosNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/avisos': typeof AvisosRoute
+  '/avisos': typeof AvisosRouteWithChildren
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/avisos/novo': typeof AvisosNovoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/avisos' | '/home' | '/login' | '/signup'
+  fullPaths: '/' | '/avisos' | '/home' | '/login' | '/signup' | '/avisos/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/avisos' | '/home' | '/login' | '/signup'
-  id: '__root__' | '/' | '/avisos' | '/home' | '/login' | '/signup'
+  to: '/' | '/avisos' | '/home' | '/login' | '/signup' | '/avisos/novo'
+  id:
+    | '__root__'
+    | '/'
+    | '/avisos'
+    | '/home'
+    | '/login'
+    | '/signup'
+    | '/avisos/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AvisosRoute: typeof AvisosRoute
+  AvisosRoute: typeof AvisosRouteWithChildren
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
@@ -116,12 +132,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/avisos/novo': {
+      id: '/avisos/novo'
+      path: '/novo'
+      fullPath: '/avisos/novo'
+      preLoaderRoute: typeof AvisosNovoRouteImport
+      parentRoute: typeof AvisosRoute
+    }
   }
 }
 
+interface AvisosRouteChildren {
+  AvisosNovoRoute: typeof AvisosNovoRoute
+}
+
+const AvisosRouteChildren: AvisosRouteChildren = {
+  AvisosNovoRoute: AvisosNovoRoute,
+}
+
+const AvisosRouteWithChildren =
+  AvisosRoute._addFileChildren(AvisosRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AvisosRoute: AvisosRoute,
+  AvisosRoute: AvisosRouteWithChildren,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
