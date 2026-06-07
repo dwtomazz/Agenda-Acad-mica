@@ -14,6 +14,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as NotasRouteImport } from './routes/notas'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as ContaRouteImport } from './routes/conta'
 import { Route as CalendarioRouteImport } from './routes/calendario'
 import { Route as AvisosRouteImport } from './routes/avisos'
 import { Route as IndexRouteImport } from './routes/index'
@@ -44,6 +45,11 @@ const LoginRoute = LoginRouteImport.update({
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContaRoute = ContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarioRoute = CalendarioRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRouteWithChildren
   '/calendario': typeof CalendarioRouteWithChildren
+  '/conta': typeof ContaRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/notas': typeof NotasRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRouteWithChildren
   '/calendario': typeof CalendarioRouteWithChildren
+  '/conta': typeof ContaRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/notas': typeof NotasRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRouteWithChildren
   '/calendario': typeof CalendarioRouteWithChildren
+  '/conta': typeof ContaRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/notas': typeof NotasRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/avisos'
     | '/calendario'
+    | '/conta'
     | '/home'
     | '/login'
     | '/notas'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/avisos'
     | '/calendario'
+    | '/conta'
     | '/home'
     | '/login'
     | '/notas'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/'
     | '/avisos'
     | '/calendario'
+    | '/conta'
     | '/home'
     | '/login'
     | '/notas'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AvisosRoute: typeof AvisosRouteWithChildren
   CalendarioRoute: typeof CalendarioRouteWithChildren
+  ContaRoute: typeof ContaRoute
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   NotasRoute: typeof NotasRoute
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conta': {
+      id: '/conta'
+      path: '/conta'
+      fullPath: '/conta'
+      preLoaderRoute: typeof ContaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendario': {
@@ -291,6 +311,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AvisosRoute: AvisosRouteWithChildren,
   CalendarioRoute: CalendarioRouteWithChildren,
+  ContaRoute: ContaRoute,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   NotasRoute: NotasRoute,
