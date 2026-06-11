@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
 import { Route as AuthenticatedMentoresRouteImport } from './routes/_authenticated/mentores'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedCalendarioRouteImport } from './routes/_authenticated/calendario'
 import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedTurmasNovaRouteImport } from './routes/_authenticated/turmas.nova'
 import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
@@ -49,6 +50,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCalendarioRoute = AuthenticatedCalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAvisosRoute = AuthenticatedAvisosRouteImport.update({
   id: '/avisos',
   path: '/avisos',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/avisos': typeof AuthenticatedAvisosRoute
+  '/calendario': typeof AuthenticatedCalendarioRoute
   '/home': typeof AuthenticatedHomeRoute
   '/mentores': typeof AuthenticatedMentoresRouteWithChildren
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/avisos': typeof AuthenticatedAvisosRoute
+  '/calendario': typeof AuthenticatedCalendarioRoute
   '/home': typeof AuthenticatedHomeRoute
   '/mentores': typeof AuthenticatedMentoresRouteWithChildren
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
+  '/_authenticated/calendario': typeof AuthenticatedCalendarioRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/mentores': typeof AuthenticatedMentoresRouteWithChildren
   '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/avisos'
+    | '/calendario'
     | '/home'
     | '/mentores'
     | '/turmas'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/avisos'
+    | '/calendario'
     | '/home'
     | '/mentores'
     | '/turmas'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/avisos'
+    | '/_authenticated/calendario'
     | '/_authenticated/home'
     | '/_authenticated/mentores'
     | '/_authenticated/turmas'
@@ -190,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/calendario': {
+      id: '/_authenticated/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof AuthenticatedCalendarioRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/avisos': {
@@ -251,6 +270,7 @@ const AuthenticatedTurmasRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
+  AuthenticatedCalendarioRoute: typeof AuthenticatedCalendarioRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedMentoresRoute: typeof AuthenticatedMentoresRouteWithChildren
   AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
@@ -258,6 +278,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
+  AuthenticatedCalendarioRoute: AuthenticatedCalendarioRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedMentoresRoute: AuthenticatedMentoresRouteWithChildren,
   AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
