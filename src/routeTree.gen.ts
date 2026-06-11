@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
 import { Route as AuthenticatedMentoresRouteImport } from './routes/_authenticated/mentores'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedTurmasNovaRouteImport } from './routes/_authenticated/turmas.nova'
 import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
 import { Route as AuthenticatedMentoresIdRouteImport } from './routes/_authenticated/mentores.$id'
@@ -48,6 +49,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAvisosRoute = AuthenticatedAvisosRouteImport.update({
+  id: '/avisos',
+  path: '/avisos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTurmasNovaRoute = AuthenticatedTurmasNovaRouteImport.update({
   id: '/nova',
   path: '/nova',
@@ -67,6 +73,7 @@ const AuthenticatedMentoresIdRoute = AuthenticatedMentoresIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/avisos': typeof AuthenticatedAvisosRoute
   '/home': typeof AuthenticatedHomeRoute
   '/mentores': typeof AuthenticatedMentoresRouteWithChildren
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
@@ -77,6 +84,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/avisos': typeof AuthenticatedAvisosRoute
   '/home': typeof AuthenticatedHomeRoute
   '/mentores': typeof AuthenticatedMentoresRouteWithChildren
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/mentores': typeof AuthenticatedMentoresRouteWithChildren
   '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/avisos'
     | '/home'
     | '/mentores'
     | '/turmas'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/avisos'
     | '/home'
     | '/mentores'
     | '/turmas'
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/avisos'
     | '/_authenticated/home'
     | '/_authenticated/mentores'
     | '/_authenticated/turmas'
@@ -180,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/avisos': {
+      id: '/_authenticated/avisos'
+      path: '/avisos'
+      fullPath: '/avisos'
+      preLoaderRoute: typeof AuthenticatedAvisosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/turmas/nova': {
       id: '/_authenticated/turmas/nova'
       path: '/nova'
@@ -231,12 +250,14 @@ const AuthenticatedTurmasRouteWithChildren =
   AuthenticatedTurmasRoute._addFileChildren(AuthenticatedTurmasRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedMentoresRoute: typeof AuthenticatedMentoresRouteWithChildren
   AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedMentoresRoute: AuthenticatedMentoresRouteWithChildren,
   AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
