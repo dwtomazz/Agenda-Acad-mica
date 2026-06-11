@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedTurmasNovaRouteImport } from './routes/_authenticated/turmas.nova'
+import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -45,12 +46,18 @@ const AuthenticatedTurmasNovaRoute = AuthenticatedTurmasNovaRouteImport.update({
   path: '/nova',
   getParentRoute: () => AuthenticatedTurmasRoute,
 } as any)
+const AuthenticatedTurmasIdRoute = AuthenticatedTurmasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedTurmasRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
   '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
   '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
 }
 export interface FileRoutesById {
@@ -67,13 +75,20 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
   '/_authenticated/turmas/nova': typeof AuthenticatedTurmasNovaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/turmas' | '/turmas/nova'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/turmas'
+    | '/turmas/$id'
+    | '/turmas/nova'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/turmas' | '/turmas/nova'
+  to: '/' | '/auth' | '/home' | '/turmas' | '/turmas/$id' | '/turmas/nova'
   id:
     | '__root__'
     | '/'
@@ -81,6 +96,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/home'
     | '/_authenticated/turmas'
+    | '/_authenticated/turmas/$id'
     | '/_authenticated/turmas/nova'
   fileRoutesById: FileRoutesById
 }
@@ -134,14 +150,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTurmasNovaRouteImport
       parentRoute: typeof AuthenticatedTurmasRoute
     }
+    '/_authenticated/turmas/$id': {
+      id: '/_authenticated/turmas/$id'
+      path: '/$id'
+      fullPath: '/turmas/$id'
+      preLoaderRoute: typeof AuthenticatedTurmasIdRouteImport
+      parentRoute: typeof AuthenticatedTurmasRoute
+    }
   }
 }
 
 interface AuthenticatedTurmasRouteChildren {
+  AuthenticatedTurmasIdRoute: typeof AuthenticatedTurmasIdRoute
   AuthenticatedTurmasNovaRoute: typeof AuthenticatedTurmasNovaRoute
 }
 
 const AuthenticatedTurmasRouteChildren: AuthenticatedTurmasRouteChildren = {
+  AuthenticatedTurmasIdRoute: AuthenticatedTurmasIdRoute,
   AuthenticatedTurmasNovaRoute: AuthenticatedTurmasNovaRoute,
 }
 
