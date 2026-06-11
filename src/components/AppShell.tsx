@@ -1,32 +1,27 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import {
   Home,
   Megaphone,
-  NotebookText,
   CalendarDays,
   Menu,
   User,
   ArrowLeft,
   X,
-  BarChart3,
-  Clock,
-  Info,
   LogOut,
+  Users,
+  Search,
   BookOpen,
 } from "lucide-react";
 import { Logo } from "./Logo";
+import { useUserRole } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
-const drawerItems = [
+const baseDrawer = [
   { to: "/home", label: "Início", icon: Home },
-  { to: "/home", label: "Minhas Aulas", icon: CalendarDays },
+  { to: "/turmas", label: "Minhas turmas", icon: BookOpen },
+  { to: "/avisos", label: "Avisos", icon: Megaphone },
   { to: "/calendario", label: "Calendário", icon: CalendarDays },
-  { to: "/trabalhos", label: "Trabalhos & Provas", icon: BookOpen },
-  { to: "/notas", label: "Notas & Frequências", icon: BarChart3 },
-  { to: "/home", label: "Horários", icon: Clock },
-  { to: "/avisos", label: "Avisos & Comunicados", icon: Megaphone },
-  { to: "/home", label: "Sobre o App", icon: Info },
-  { to: "/sair", label: "Sair", icon: LogOut },
 ] as const;
 
 export function AppShell({
@@ -44,6 +39,20 @@ export function AppShell({
 }) {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { role } = useUserRole();
+  const navigate = useNavigate();
+  const drawerItems = [
+    ...baseDrawer,
+    ...(role === "aluno"
+      ? [{ to: "/mentores" as const, label: "Procurar mentores", icon: Search }]
+      : []),
+    { to: "/conta" as const, label: "Meu perfil", icon: User },
+  ];
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  };
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
@@ -112,7 +121,7 @@ export function AppShell({
                 return (
                   <Link
                     key={i}
-                    to={it.to}
+                    to={it.to as string}
                     onClick={() => setOpen(false)}
                     className={`flex items-center gap-4 border-b border-sidebar-border/40 px-5 py-4 text-sm ${
                       active ? "text-primary" : "text-sidebar-foreground"
@@ -123,6 +132,13 @@ export function AppShell({
                   </Link>
                 );
               })}
+              <button
+                onClick={signOut}
+                className="flex w-full items-center gap-4 border-b border-sidebar-border/40 px-5 py-4 text-left text-sm text-destructive hover:bg-sidebar-accent"
+              >
+                <LogOut size={20} />
+                <span className="font-medium">Sair</span>
+              </button>
             </nav>
           </aside>
         </div>
@@ -132,12 +148,21 @@ export function AppShell({
 }
 
 function BottomNav({ pathname }: { pathname: string }) {
-  const items = [
-    { to: "/home", label: "HOME", icon: Home },
-    { to: "/avisos", label: "AVISOS", icon: Megaphone },
-    { to: "/trabalhos", label: "TRABALHOS", icon: NotebookText },
-    { to: "/calendario", label: "CALENDÁRIO", icon: CalendarDays },
-  ];
+  const { role } = useUserRole();
+  const items =
+    role === "aluno"
+      ? [
+          { to: "/home", label: "INÍCIO", icon: Home },
+          { to: "/mentores", label: "MENTORES", icon: Search },
+          { to: "/turmas", label: "TURMAS", icon: BookOpen },
+          { to: "/avisos", label: "AVISOS", icon: Megaphone },
+        ]
+      : [
+          { to: "/home", label: "INÍCIO", icon: Home },
+          { to: "/turmas", label: "TURMAS", icon: BookOpen },
+          { to: "/avisos", label: "AVISOS", icon: Megaphone },
+          { to: "/calendario", label: "AGENDA", icon: CalendarDays },
+        ];
   return (
     <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-card/95 backdrop-blur">
       <div className="mx-auto grid max-w-md grid-cols-4">
@@ -162,3 +187,6 @@ function BottomNav({ pathname }: { pathname: string }) {
     </nav>
   );
 }
+
+// Suppress lint for unused imports
+export const _unused = { Users };
