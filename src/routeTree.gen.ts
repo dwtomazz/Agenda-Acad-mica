@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
+import { Route as AuthenticatedMentoresRouteImport } from './routes/_authenticated/mentores'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedTurmasNovaRouteImport } from './routes/_authenticated/turmas.nova'
 import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
@@ -36,6 +37,11 @@ const AuthenticatedTurmasRoute = AuthenticatedTurmasRouteImport.update({
   path: '/turmas',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMentoresRoute = AuthenticatedMentoresRouteImport.update({
+  id: '/mentores',
+  path: '/mentores',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -56,6 +62,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/mentores': typeof AuthenticatedMentoresRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
   '/turmas/$id': typeof AuthenticatedTurmasIdRoute
   '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/mentores': typeof AuthenticatedMentoresRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
   '/turmas/$id': typeof AuthenticatedTurmasIdRoute
   '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
@@ -74,6 +82,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/mentores': typeof AuthenticatedMentoresRoute
   '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
   '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
   '/_authenticated/turmas/nova': typeof AuthenticatedTurmasNovaRoute
@@ -84,17 +93,26 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/home'
+    | '/mentores'
     | '/turmas'
     | '/turmas/$id'
     | '/turmas/nova'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/turmas' | '/turmas/$id' | '/turmas/nova'
+  to:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/mentores'
+    | '/turmas'
+    | '/turmas/$id'
+    | '/turmas/nova'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/home'
+    | '/_authenticated/mentores'
     | '/_authenticated/turmas'
     | '/_authenticated/turmas/$id'
     | '/_authenticated/turmas/nova'
@@ -136,6 +154,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTurmasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mentores': {
+      id: '/_authenticated/mentores'
+      path: '/mentores'
+      fullPath: '/mentores'
+      preLoaderRoute: typeof AuthenticatedMentoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/home': {
       id: '/_authenticated/home'
       path: '/home'
@@ -175,11 +200,13 @@ const AuthenticatedTurmasRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedMentoresRoute: typeof AuthenticatedMentoresRoute
   AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedMentoresRoute: AuthenticatedMentoresRoute,
   AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
 }
 
