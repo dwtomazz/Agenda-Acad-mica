@@ -1,71 +1,81 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
-import { LogIn, UserPlus, Lock, CalendarDays, BookOpen, Clock, ClipboardList, GraduationCap } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { LogIn, UserPlus, GraduationCap, Users, MessageCircle, BookOpen } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Agenda Acadêmica" },
-      { name: "description", content: "Sua rotina acadêmica organizada: avisos, trabalhos, calendário e notas." },
-      { property: "og:title", content: "Agenda Acadêmica" },
-      { property: "og:description", content: "Sua rotina acadêmica organizada em um só lugar." },
+      { title: "Mentora — conectando alunos e mentores" },
+      { name: "description", content: "Plataforma de mentorias: turmas, chat, materiais, tarefas e avisos em um só lugar." },
+      { property: "og:title", content: "Mentora" },
+      { property: "og:description", content: "Conecte-se a mentores, participe de turmas e acompanhe sua jornada." },
     ],
   }),
-  component: Index,
+  component: Landing,
 });
 
-function Index() {
+function Landing() {
   return (
     <div
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-10"
-      style={{
-        background:
-          "radial-gradient(circle at 20% 0%, oklch(0.45 0.2 260) 0%, oklch(0.16 0.05 265) 60%)",
-      }}
+      className="relative min-h-screen overflow-hidden"
+      style={{ background: "radial-gradient(circle at 20% 0%, oklch(0.45 0.2 260) 0%, oklch(0.16 0.05 265) 60%)" }}
     >
-      <BgIcons />
-      <div className="relative z-10 w-full max-w-sm text-center">
-        <div className="flex justify-center"><Logo size="lg" /></div>
-        <h1 className="mt-12 text-4xl font-bold text-foreground">Bem-vindo(a)</h1>
-        <p className="mt-2 text-base text-muted-foreground">à sua rotina acadêmica</p>
+      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 pt-6">
+        <Logo size="md" />
+        <Link
+          to="/auth"
+          className="rounded-xl border border-border bg-card/60 px-4 py-2 text-sm font-medium text-foreground hover:bg-card"
+        >
+          Entrar
+        </Link>
+      </header>
 
-        <div className="mt-10 space-y-4">
+      <main className="mx-auto max-w-5xl px-6 pt-16 pb-24 text-center">
+        <h1 className="mx-auto max-w-3xl text-5xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl">
+          Aprenda com quem já chegou lá.
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
+          Mentora conecta alunos e mentores em turmas com chat, materiais, tarefas e calendário — tudo em um só lugar.
+        </p>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Link
-            to="/login"
-            className="flex h-14 w-full items-center justify-center gap-3 rounded-xl text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition hover:brightness-110"
+            to="/auth"
+            className="flex h-12 items-center gap-2 rounded-xl px-6 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)]"
             style={{ background: "var(--gradient-primary)" }}
           >
-            <LogIn size={20} /> Entrar
+            <UserPlus size={18} /> Criar conta grátis
           </Link>
           <Link
-            to="/signup"
-            className="flex h-14 w-full items-center justify-center gap-3 rounded-xl border border-border bg-card text-base font-semibold text-foreground transition hover:bg-secondary"
+            to="/auth"
+            className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-6 text-sm font-semibold text-foreground"
           >
-            <UserPlus size={20} /> Criar conta
+            <LogIn size={18} /> Já tenho conta
           </Link>
         </div>
 
-        <div className="mt-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-          <Lock size={12} /> Seus dados estão protegidos
+        <div className="mt-20 grid gap-4 sm:grid-cols-3">
+          {[
+            { i: Users, t: "Encontre mentores", d: "Procure por área e solicite entrada nas turmas." },
+            { i: MessageCircle, t: "Chat em tempo real", d: "Tire dúvidas direto com seu mentor e colegas." },
+            { i: BookOpen, t: "Materiais e tarefas", d: "Aulas gravadas, links, atividades e entregas." },
+          ].map((f, i) => (
+            <div key={i} className="rounded-2xl border border-border bg-card/60 p-6 text-left backdrop-blur">
+              <div
+                className="mb-3 grid h-11 w-11 place-items-center rounded-xl text-primary-foreground"
+                style={{ background: "var(--gradient-primary)" }}
+              >
+                <f.i size={20} />
+              </div>
+              <p className="text-base font-semibold">{f.t}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{f.d}</p>
+            </div>
+          ))}
         </div>
-      </div>
-    </div>
-  );
-}
+      </main>
 
-function BgIcons() {
-  const icons = [CalendarDays, BookOpen, Clock, ClipboardList, GraduationCap];
-  const positions = [
-    "top-10 left-6", "top-16 right-8", "top-1/3 left-2", "top-1/2 right-4",
-    "bottom-24 left-10", "bottom-16 right-12", "bottom-40 right-2",
-  ];
-  return (
-    <div className="pointer-events-none absolute inset-0 opacity-[0.06]">
-      {positions.map((p, i) => {
-        const Ic = icons[i % icons.length];
-        return <Ic key={i} size={56} className={`absolute ${p} text-foreground`} />;
-      })}
+      <footer className="mx-auto max-w-5xl px-6 pb-6 text-center text-xs text-muted-foreground">
+        <GraduationCap size={14} className="mr-1 inline" /> Mentora © {new Date().getFullYear()}
+      </footer>
     </div>
   );
 }

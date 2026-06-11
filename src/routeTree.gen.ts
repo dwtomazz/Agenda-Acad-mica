@@ -9,63 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TrabalhosRouteImport } from './routes/trabalhos'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SairRouteImport } from './routes/sair'
-import { Route as NotasRouteImport } from './routes/notas'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as ContaRouteImport } from './routes/conta'
-import { Route as CalendarioRouteImport } from './routes/calendario'
-import { Route as AvisosRouteImport } from './routes/avisos'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TrabalhosNovoRouteImport } from './routes/trabalhos.novo'
-import { Route as CalendarioFiltrosRouteImport } from './routes/calendario.filtros'
-import { Route as AvisosNovoRouteImport } from './routes/avisos.novo'
+import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
+import { Route as AuthenticatedMentoresRouteImport } from './routes/_authenticated/mentores'
+import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
+import { Route as AuthenticatedCalendarioRouteImport } from './routes/_authenticated/calendario'
+import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
+import { Route as AuthenticatedTurmasNovaRouteImport } from './routes/_authenticated/turmas.nova'
+import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
+import { Route as AuthenticatedMentoresIdRouteImport } from './routes/_authenticated/mentores.$id'
 
-const TrabalhosRoute = TrabalhosRouteImport.update({
-  id: '/trabalhos',
-  path: '/trabalhos',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SairRoute = SairRouteImport.update({
-  id: '/sair',
-  path: '/sair',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotasRoute = NotasRouteImport.update({
-  id: '/notas',
-  path: '/notas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContaRoute = ContaRouteImport.update({
-  id: '/conta',
-  path: '/conta',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CalendarioRoute = CalendarioRouteImport.update({
-  id: '/calendario',
-  path: '/calendario',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AvisosRoute = AvisosRouteImport.update({
-  id: '/avisos',
-  path: '/avisos',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -73,192 +36,156 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TrabalhosNovoRoute = TrabalhosNovoRouteImport.update({
-  id: '/novo',
-  path: '/novo',
-  getParentRoute: () => TrabalhosRoute,
+const AuthenticatedTurmasRoute = AuthenticatedTurmasRouteImport.update({
+  id: '/turmas',
+  path: '/turmas',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const CalendarioFiltrosRoute = CalendarioFiltrosRouteImport.update({
-  id: '/filtros',
-  path: '/filtros',
-  getParentRoute: () => CalendarioRoute,
+const AuthenticatedMentoresRoute = AuthenticatedMentoresRouteImport.update({
+  id: '/mentores',
+  path: '/mentores',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AvisosNovoRoute = AvisosNovoRouteImport.update({
-  id: '/novo',
-  path: '/novo',
-  getParentRoute: () => AvisosRoute,
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedContaRoute = AuthenticatedContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCalendarioRoute = AuthenticatedCalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAvisosRoute = AuthenticatedAvisosRouteImport.update({
+  id: '/avisos',
+  path: '/avisos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTurmasNovaRoute = AuthenticatedTurmasNovaRouteImport.update({
+  id: '/nova',
+  path: '/nova',
+  getParentRoute: () => AuthenticatedTurmasRoute,
+} as any)
+const AuthenticatedTurmasIdRoute = AuthenticatedTurmasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedTurmasRoute,
+} as any)
+const AuthenticatedMentoresIdRoute = AuthenticatedMentoresIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedMentoresRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/avisos': typeof AvisosRouteWithChildren
-  '/calendario': typeof CalendarioRouteWithChildren
-  '/conta': typeof ContaRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/notas': typeof NotasRoute
-  '/sair': typeof SairRoute
-  '/signup': typeof SignupRoute
-  '/trabalhos': typeof TrabalhosRouteWithChildren
-  '/avisos/novo': typeof AvisosNovoRoute
-  '/calendario/filtros': typeof CalendarioFiltrosRoute
-  '/trabalhos/novo': typeof TrabalhosNovoRoute
+  '/auth': typeof AuthRoute
+  '/avisos': typeof AuthenticatedAvisosRoute
+  '/calendario': typeof AuthenticatedCalendarioRoute
+  '/conta': typeof AuthenticatedContaRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/mentores': typeof AuthenticatedMentoresRouteWithChildren
+  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/mentores/$id': typeof AuthenticatedMentoresIdRoute
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
+  '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/avisos': typeof AvisosRouteWithChildren
-  '/calendario': typeof CalendarioRouteWithChildren
-  '/conta': typeof ContaRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/notas': typeof NotasRoute
-  '/sair': typeof SairRoute
-  '/signup': typeof SignupRoute
-  '/trabalhos': typeof TrabalhosRouteWithChildren
-  '/avisos/novo': typeof AvisosNovoRoute
-  '/calendario/filtros': typeof CalendarioFiltrosRoute
-  '/trabalhos/novo': typeof TrabalhosNovoRoute
+  '/auth': typeof AuthRoute
+  '/avisos': typeof AuthenticatedAvisosRoute
+  '/calendario': typeof AuthenticatedCalendarioRoute
+  '/conta': typeof AuthenticatedContaRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/mentores': typeof AuthenticatedMentoresRouteWithChildren
+  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/mentores/$id': typeof AuthenticatedMentoresIdRoute
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
+  '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/avisos': typeof AvisosRouteWithChildren
-  '/calendario': typeof CalendarioRouteWithChildren
-  '/conta': typeof ContaRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/notas': typeof NotasRoute
-  '/sair': typeof SairRoute
-  '/signup': typeof SignupRoute
-  '/trabalhos': typeof TrabalhosRouteWithChildren
-  '/avisos/novo': typeof AvisosNovoRoute
-  '/calendario/filtros': typeof CalendarioFiltrosRoute
-  '/trabalhos/novo': typeof TrabalhosNovoRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
+  '/_authenticated/calendario': typeof AuthenticatedCalendarioRoute
+  '/_authenticated/conta': typeof AuthenticatedContaRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/mentores': typeof AuthenticatedMentoresRouteWithChildren
+  '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/_authenticated/mentores/$id': typeof AuthenticatedMentoresIdRoute
+  '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
+  '/_authenticated/turmas/nova': typeof AuthenticatedTurmasNovaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/avisos'
     | '/calendario'
     | '/conta'
     | '/home'
-    | '/login'
-    | '/notas'
-    | '/sair'
-    | '/signup'
-    | '/trabalhos'
-    | '/avisos/novo'
-    | '/calendario/filtros'
-    | '/trabalhos/novo'
+    | '/mentores'
+    | '/turmas'
+    | '/mentores/$id'
+    | '/turmas/$id'
+    | '/turmas/nova'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/avisos'
     | '/calendario'
     | '/conta'
     | '/home'
-    | '/login'
-    | '/notas'
-    | '/sair'
-    | '/signup'
-    | '/trabalhos'
-    | '/avisos/novo'
-    | '/calendario/filtros'
-    | '/trabalhos/novo'
+    | '/mentores'
+    | '/turmas'
+    | '/mentores/$id'
+    | '/turmas/$id'
+    | '/turmas/nova'
   id:
     | '__root__'
     | '/'
-    | '/avisos'
-    | '/calendario'
-    | '/conta'
-    | '/home'
-    | '/login'
-    | '/notas'
-    | '/sair'
-    | '/signup'
-    | '/trabalhos'
-    | '/avisos/novo'
-    | '/calendario/filtros'
-    | '/trabalhos/novo'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/avisos'
+    | '/_authenticated/calendario'
+    | '/_authenticated/conta'
+    | '/_authenticated/home'
+    | '/_authenticated/mentores'
+    | '/_authenticated/turmas'
+    | '/_authenticated/mentores/$id'
+    | '/_authenticated/turmas/$id'
+    | '/_authenticated/turmas/nova'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AvisosRoute: typeof AvisosRouteWithChildren
-  CalendarioRoute: typeof CalendarioRouteWithChildren
-  ContaRoute: typeof ContaRoute
-  HomeRoute: typeof HomeRoute
-  LoginRoute: typeof LoginRoute
-  NotasRoute: typeof NotasRoute
-  SairRoute: typeof SairRoute
-  SignupRoute: typeof SignupRoute
-  TrabalhosRoute: typeof TrabalhosRouteWithChildren
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/trabalhos': {
-      id: '/trabalhos'
-      path: '/trabalhos'
-      fullPath: '/trabalhos'
-      preLoaderRoute: typeof TrabalhosRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sair': {
-      id: '/sair'
-      path: '/sair'
-      fullPath: '/sair'
-      preLoaderRoute: typeof SairRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notas': {
-      id: '/notas'
-      path: '/notas'
-      fullPath: '/notas'
-      preLoaderRoute: typeof NotasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/conta': {
-      id: '/conta'
-      path: '/conta'
-      fullPath: '/conta'
-      preLoaderRoute: typeof ContaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calendario': {
-      id: '/calendario'
-      path: '/calendario'
-      fullPath: '/calendario'
-      preLoaderRoute: typeof CalendarioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/avisos': {
-      id: '/avisos'
-      path: '/avisos'
-      fullPath: '/avisos'
-      preLoaderRoute: typeof AvisosRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -268,76 +195,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/trabalhos/novo': {
-      id: '/trabalhos/novo'
-      path: '/novo'
-      fullPath: '/trabalhos/novo'
-      preLoaderRoute: typeof TrabalhosNovoRouteImport
-      parentRoute: typeof TrabalhosRoute
+    '/_authenticated/turmas': {
+      id: '/_authenticated/turmas'
+      path: '/turmas'
+      fullPath: '/turmas'
+      preLoaderRoute: typeof AuthenticatedTurmasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/calendario/filtros': {
-      id: '/calendario/filtros'
-      path: '/filtros'
-      fullPath: '/calendario/filtros'
-      preLoaderRoute: typeof CalendarioFiltrosRouteImport
-      parentRoute: typeof CalendarioRoute
+    '/_authenticated/mentores': {
+      id: '/_authenticated/mentores'
+      path: '/mentores'
+      fullPath: '/mentores'
+      preLoaderRoute: typeof AuthenticatedMentoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/avisos/novo': {
-      id: '/avisos/novo'
-      path: '/novo'
-      fullPath: '/avisos/novo'
-      preLoaderRoute: typeof AvisosNovoRouteImport
-      parentRoute: typeof AvisosRoute
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/conta': {
+      id: '/_authenticated/conta'
+      path: '/conta'
+      fullPath: '/conta'
+      preLoaderRoute: typeof AuthenticatedContaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/calendario': {
+      id: '/_authenticated/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof AuthenticatedCalendarioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/avisos': {
+      id: '/_authenticated/avisos'
+      path: '/avisos'
+      fullPath: '/avisos'
+      preLoaderRoute: typeof AuthenticatedAvisosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/turmas/nova': {
+      id: '/_authenticated/turmas/nova'
+      path: '/nova'
+      fullPath: '/turmas/nova'
+      preLoaderRoute: typeof AuthenticatedTurmasNovaRouteImport
+      parentRoute: typeof AuthenticatedTurmasRoute
+    }
+    '/_authenticated/turmas/$id': {
+      id: '/_authenticated/turmas/$id'
+      path: '/$id'
+      fullPath: '/turmas/$id'
+      preLoaderRoute: typeof AuthenticatedTurmasIdRouteImport
+      parentRoute: typeof AuthenticatedTurmasRoute
+    }
+    '/_authenticated/mentores/$id': {
+      id: '/_authenticated/mentores/$id'
+      path: '/$id'
+      fullPath: '/mentores/$id'
+      preLoaderRoute: typeof AuthenticatedMentoresIdRouteImport
+      parentRoute: typeof AuthenticatedMentoresRoute
     }
   }
 }
 
-interface AvisosRouteChildren {
-  AvisosNovoRoute: typeof AvisosNovoRoute
+interface AuthenticatedMentoresRouteChildren {
+  AuthenticatedMentoresIdRoute: typeof AuthenticatedMentoresIdRoute
 }
 
-const AvisosRouteChildren: AvisosRouteChildren = {
-  AvisosNovoRoute: AvisosNovoRoute,
+const AuthenticatedMentoresRouteChildren: AuthenticatedMentoresRouteChildren = {
+  AuthenticatedMentoresIdRoute: AuthenticatedMentoresIdRoute,
 }
 
-const AvisosRouteWithChildren =
-  AvisosRoute._addFileChildren(AvisosRouteChildren)
+const AuthenticatedMentoresRouteWithChildren =
+  AuthenticatedMentoresRoute._addFileChildren(
+    AuthenticatedMentoresRouteChildren,
+  )
 
-interface CalendarioRouteChildren {
-  CalendarioFiltrosRoute: typeof CalendarioFiltrosRoute
+interface AuthenticatedTurmasRouteChildren {
+  AuthenticatedTurmasIdRoute: typeof AuthenticatedTurmasIdRoute
+  AuthenticatedTurmasNovaRoute: typeof AuthenticatedTurmasNovaRoute
 }
 
-const CalendarioRouteChildren: CalendarioRouteChildren = {
-  CalendarioFiltrosRoute: CalendarioFiltrosRoute,
+const AuthenticatedTurmasRouteChildren: AuthenticatedTurmasRouteChildren = {
+  AuthenticatedTurmasIdRoute: AuthenticatedTurmasIdRoute,
+  AuthenticatedTurmasNovaRoute: AuthenticatedTurmasNovaRoute,
 }
 
-const CalendarioRouteWithChildren = CalendarioRoute._addFileChildren(
-  CalendarioRouteChildren,
-)
+const AuthenticatedTurmasRouteWithChildren =
+  AuthenticatedTurmasRoute._addFileChildren(AuthenticatedTurmasRouteChildren)
 
-interface TrabalhosRouteChildren {
-  TrabalhosNovoRoute: typeof TrabalhosNovoRoute
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
+  AuthenticatedCalendarioRoute: typeof AuthenticatedCalendarioRoute
+  AuthenticatedContaRoute: typeof AuthenticatedContaRoute
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedMentoresRoute: typeof AuthenticatedMentoresRouteWithChildren
+  AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
 }
 
-const TrabalhosRouteChildren: TrabalhosRouteChildren = {
-  TrabalhosNovoRoute: TrabalhosNovoRoute,
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
+  AuthenticatedCalendarioRoute: AuthenticatedCalendarioRoute,
+  AuthenticatedContaRoute: AuthenticatedContaRoute,
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedMentoresRoute: AuthenticatedMentoresRouteWithChildren,
+  AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
 }
 
-const TrabalhosRouteWithChildren = TrabalhosRoute._addFileChildren(
-  TrabalhosRouteChildren,
-)
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AvisosRoute: AvisosRouteWithChildren,
-  CalendarioRoute: CalendarioRouteWithChildren,
-  ContaRoute: ContaRoute,
-  HomeRoute: HomeRoute,
-  LoginRoute: LoginRoute,
-  NotasRoute: NotasRoute,
-  SairRoute: SairRoute,
-  SignupRoute: SignupRoute,
-  TrabalhosRoute: TrabalhosRouteWithChildren,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
