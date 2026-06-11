@@ -14,16 +14,362 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      announcements: {
+        Row: {
+          author_id: string
+          body: string
+          class_id: string | null
+          created_at: string
+          id: string
+          title: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          class_id?: string | null
+          created_at?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          class_id?: string | null
+          created_at?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcements_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignments: {
+        Row: {
+          class_id: string
+          created_at: string
+          description: string | null
+          due_at: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_members: {
+        Row: {
+          class_id: string
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["member_status"]
+          user_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["member_status"]
+          user_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["member_status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_members_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classes: {
+        Row: {
+          area: string | null
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          mentor_id: string
+          title: string
+        }
+        Insert: {
+          area?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          mentor_id: string
+          title: string
+        }
+        Update: {
+          area?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          mentor_id?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          class_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          starts_at: string
+          title: string
+          type: Database["public"]["Enums"]["event_type"]
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          starts_at: string
+          title: string
+          type?: Database["public"]["Enums"]["event_type"]
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          starts_at?: string
+          title?: string
+          type?: Database["public"]["Enums"]["event_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      materials: {
+        Row: {
+          class_id: string
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          title: string
+          type: Database["public"]["Enums"]["material_type"]
+          url: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          title: string
+          type: Database["public"]["Enums"]["material_type"]
+          url: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          title?: string
+          type?: Database["public"]["Enums"]["material_type"]
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "materials_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          class_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          class_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          class_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          area: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string
+          id: string
+        }
+        Insert: {
+          area?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string
+          id: string
+        }
+        Update: {
+          area?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          assignment_id: string
+          body: string | null
+          feedback: string | null
+          file_url: string | null
+          grade: number | null
+          id: string
+          submitted_at: string
+          user_id: string
+        }
+        Insert: {
+          assignment_id: string
+          body?: string | null
+          feedback?: string | null
+          file_url?: string | null
+          grade?: number | null
+          id?: string
+          submitted_at?: string
+          user_id: string
+        }
+        Update: {
+          assignment_id?: string
+          body?: string | null
+          feedback?: string | null
+          file_url?: string | null
+          grade?: number | null
+          id?: string
+          submitted_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      assignment_class: { Args: { _assignment_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_class_member: {
+        Args: { _class_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_class_mentor: {
+        Args: { _class_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "aluno" | "mentor"
+      event_type: "aula" | "prova" | "seminario" | "atividade"
+      material_type: "arquivo" | "link" | "aula_gravada"
+      member_status: "pendente" | "aprovado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +496,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["aluno", "mentor"],
+      event_type: ["aula", "prova", "seminario", "atividade"],
+      material_type: ["arquivo", "link", "aula_gravada"],
+      member_status: ["pendente", "aprovado"],
+    },
   },
 } as const
