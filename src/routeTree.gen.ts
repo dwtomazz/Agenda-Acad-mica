@@ -12,13 +12,17 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
 import { Route as AuthenticatedNotasRouteImport } from './routes/_authenticated/notas'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedEntregasRouteImport } from './routes/_authenticated/entregas'
 import { Route as AuthenticatedCalendarioRouteImport } from './routes/_authenticated/calendario'
 import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
+import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
 import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authenticated/atividades.nova'
+import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -34,6 +38,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTurmasRoute = AuthenticatedTurmasRouteImport.update({
+  id: '/turmas',
+  path: '/turmas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
@@ -47,6 +56,11 @@ const AuthenticatedNotasRoute = AuthenticatedNotasRouteImport.update({
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEntregasRoute = AuthenticatedEntregasRouteImport.update({
+  id: '/entregas',
+  path: '/entregas',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCalendarioRoute = AuthenticatedCalendarioRouteImport.update({
@@ -64,11 +78,22 @@ const AuthenticatedAtividadesRoute = AuthenticatedAtividadesRouteImport.update({
   path: '/atividades',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTurmasIdRoute = AuthenticatedTurmasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedTurmasRoute,
+} as any)
 const AuthenticatedAtividadesNovaRoute =
   AuthenticatedAtividadesNovaRouteImport.update({
     id: '/nova',
     path: '/nova',
     getParentRoute: () => AuthenticatedAtividadesRoute,
+  } as any)
+const AuthenticatedAdminUsuariosRoute =
+  AuthenticatedAdminUsuariosRouteImport.update({
+    id: '/admin/usuarios',
+    path: '/admin/usuarios',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -77,10 +102,14 @@ export interface FileRoutesByFullPath {
   '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/avisos': typeof AuthenticatedAvisosRoute
   '/calendario': typeof AuthenticatedCalendarioRoute
+  '/entregas': typeof AuthenticatedEntregasRoute
   '/home': typeof AuthenticatedHomeRoute
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -88,10 +117,14 @@ export interface FileRoutesByTo {
   '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/avisos': typeof AuthenticatedAvisosRoute
   '/calendario': typeof AuthenticatedCalendarioRoute
+  '/entregas': typeof AuthenticatedEntregasRoute
   '/home': typeof AuthenticatedHomeRoute
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,10 +134,14 @@ export interface FileRoutesById {
   '/_authenticated/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/calendario': typeof AuthenticatedCalendarioRoute
+  '/_authenticated/entregas': typeof AuthenticatedEntregasRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/notas': typeof AuthenticatedNotasRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/_authenticated/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
+  '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,10 +151,14 @@ export interface FileRouteTypes {
     | '/atividades'
     | '/avisos'
     | '/calendario'
+    | '/entregas'
     | '/home'
     | '/notas'
     | '/perfil'
+    | '/turmas'
+    | '/admin/usuarios'
     | '/atividades/nova'
+    | '/turmas/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -125,10 +166,14 @@ export interface FileRouteTypes {
     | '/atividades'
     | '/avisos'
     | '/calendario'
+    | '/entregas'
     | '/home'
     | '/notas'
     | '/perfil'
+    | '/turmas'
+    | '/admin/usuarios'
     | '/atividades/nova'
+    | '/turmas/$id'
   id:
     | '__root__'
     | '/'
@@ -137,10 +182,14 @@ export interface FileRouteTypes {
     | '/_authenticated/atividades'
     | '/_authenticated/avisos'
     | '/_authenticated/calendario'
+    | '/_authenticated/entregas'
     | '/_authenticated/home'
     | '/_authenticated/notas'
     | '/_authenticated/perfil'
+    | '/_authenticated/turmas'
+    | '/_authenticated/admin/usuarios'
     | '/_authenticated/atividades/nova'
+    | '/_authenticated/turmas/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -172,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/turmas': {
+      id: '/_authenticated/turmas'
+      path: '/turmas'
+      fullPath: '/turmas'
+      preLoaderRoute: typeof AuthenticatedTurmasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/perfil': {
       id: '/_authenticated/perfil'
       path: '/perfil'
@@ -191,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/entregas': {
+      id: '/_authenticated/entregas'
+      path: '/entregas'
+      fullPath: '/entregas'
+      preLoaderRoute: typeof AuthenticatedEntregasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/calendario': {
@@ -214,12 +277,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtividadesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/turmas/$id': {
+      id: '/_authenticated/turmas/$id'
+      path: '/$id'
+      fullPath: '/turmas/$id'
+      preLoaderRoute: typeof AuthenticatedTurmasIdRouteImport
+      parentRoute: typeof AuthenticatedTurmasRoute
+    }
     '/_authenticated/atividades/nova': {
       id: '/_authenticated/atividades/nova'
       path: '/nova'
       fullPath: '/atividades/nova'
       preLoaderRoute: typeof AuthenticatedAtividadesNovaRouteImport
       parentRoute: typeof AuthenticatedAtividadesRoute
+    }
+    '/_authenticated/admin/usuarios': {
+      id: '/_authenticated/admin/usuarios'
+      path: '/admin/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
@@ -238,22 +315,39 @@ const AuthenticatedAtividadesRouteWithChildren =
     AuthenticatedAtividadesRouteChildren,
   )
 
+interface AuthenticatedTurmasRouteChildren {
+  AuthenticatedTurmasIdRoute: typeof AuthenticatedTurmasIdRoute
+}
+
+const AuthenticatedTurmasRouteChildren: AuthenticatedTurmasRouteChildren = {
+  AuthenticatedTurmasIdRoute: AuthenticatedTurmasIdRoute,
+}
+
+const AuthenticatedTurmasRouteWithChildren =
+  AuthenticatedTurmasRoute._addFileChildren(AuthenticatedTurmasRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRouteWithChildren
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedCalendarioRoute: typeof AuthenticatedCalendarioRoute
+  AuthenticatedEntregasRoute: typeof AuthenticatedEntregasRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
+  AuthenticatedAdminUsuariosRoute: typeof AuthenticatedAdminUsuariosRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAtividadesRoute: AuthenticatedAtividadesRouteWithChildren,
   AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
   AuthenticatedCalendarioRoute: AuthenticatedCalendarioRoute,
+  AuthenticatedEntregasRoute: AuthenticatedEntregasRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedNotasRoute: AuthenticatedNotasRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
+  AuthenticatedAdminUsuariosRoute: AuthenticatedAdminUsuariosRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
