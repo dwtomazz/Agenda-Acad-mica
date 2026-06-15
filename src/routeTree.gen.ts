@@ -12,15 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
-import { Route as AuthenticatedMentoresRouteImport } from './routes/_authenticated/mentores'
+import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedNotasRouteImport } from './routes/_authenticated/notas'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
-import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
 import { Route as AuthenticatedCalendarioRouteImport } from './routes/_authenticated/calendario'
 import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
-import { Route as AuthenticatedTurmasNovaRouteImport } from './routes/_authenticated/turmas.nova'
-import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
-import { Route as AuthenticatedMentoresIdRouteImport } from './routes/_authenticated/mentores.$id'
+import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
+import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authenticated/atividades.nova'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -36,24 +34,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedTurmasRoute = AuthenticatedTurmasRouteImport.update({
-  id: '/turmas',
-  path: '/turmas',
+const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedMentoresRoute = AuthenticatedMentoresRouteImport.update({
-  id: '/mentores',
-  path: '/mentores',
+const AuthenticatedNotasRoute = AuthenticatedNotasRouteImport.update({
+  id: '/notas',
+  path: '/notas',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/home',
   path: '/home',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedContaRoute = AuthenticatedContaRouteImport.update({
-  id: '/conta',
-  path: '/conta',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCalendarioRoute = AuthenticatedCalendarioRouteImport.update({
@@ -66,104 +59,88 @@ const AuthenticatedAvisosRoute = AuthenticatedAvisosRouteImport.update({
   path: '/avisos',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedTurmasNovaRoute = AuthenticatedTurmasNovaRouteImport.update({
-  id: '/nova',
-  path: '/nova',
-  getParentRoute: () => AuthenticatedTurmasRoute,
+const AuthenticatedAtividadesRoute = AuthenticatedAtividadesRouteImport.update({
+  id: '/atividades',
+  path: '/atividades',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedTurmasIdRoute = AuthenticatedTurmasIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AuthenticatedTurmasRoute,
-} as any)
-const AuthenticatedMentoresIdRoute = AuthenticatedMentoresIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AuthenticatedMentoresRoute,
-} as any)
+const AuthenticatedAtividadesNovaRoute =
+  AuthenticatedAtividadesNovaRouteImport.update({
+    id: '/nova',
+    path: '/nova',
+    getParentRoute: () => AuthenticatedAtividadesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/avisos': typeof AuthenticatedAvisosRoute
   '/calendario': typeof AuthenticatedCalendarioRoute
-  '/conta': typeof AuthenticatedContaRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/mentores': typeof AuthenticatedMentoresRouteWithChildren
-  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
-  '/mentores/$id': typeof AuthenticatedMentoresIdRoute
-  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
-  '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
+  '/notas': typeof AuthenticatedNotasRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/avisos': typeof AuthenticatedAvisosRoute
   '/calendario': typeof AuthenticatedCalendarioRoute
-  '/conta': typeof AuthenticatedContaRoute
   '/home': typeof AuthenticatedHomeRoute
-  '/mentores': typeof AuthenticatedMentoresRouteWithChildren
-  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
-  '/mentores/$id': typeof AuthenticatedMentoresIdRoute
-  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
-  '/turmas/nova': typeof AuthenticatedTurmasNovaRoute
+  '/notas': typeof AuthenticatedNotasRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
+  '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/calendario': typeof AuthenticatedCalendarioRoute
-  '/_authenticated/conta': typeof AuthenticatedContaRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
-  '/_authenticated/mentores': typeof AuthenticatedMentoresRouteWithChildren
-  '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
-  '/_authenticated/mentores/$id': typeof AuthenticatedMentoresIdRoute
-  '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
-  '/_authenticated/turmas/nova': typeof AuthenticatedTurmasNovaRoute
+  '/_authenticated/notas': typeof AuthenticatedNotasRoute
+  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/atividades'
     | '/avisos'
     | '/calendario'
-    | '/conta'
     | '/home'
-    | '/mentores'
-    | '/turmas'
-    | '/mentores/$id'
-    | '/turmas/$id'
-    | '/turmas/nova'
+    | '/notas'
+    | '/perfil'
+    | '/atividades/nova'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/atividades'
     | '/avisos'
     | '/calendario'
-    | '/conta'
     | '/home'
-    | '/mentores'
-    | '/turmas'
-    | '/mentores/$id'
-    | '/turmas/$id'
-    | '/turmas/nova'
+    | '/notas'
+    | '/perfil'
+    | '/atividades/nova'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/atividades'
     | '/_authenticated/avisos'
     | '/_authenticated/calendario'
-    | '/_authenticated/conta'
     | '/_authenticated/home'
-    | '/_authenticated/mentores'
-    | '/_authenticated/turmas'
-    | '/_authenticated/mentores/$id'
-    | '/_authenticated/turmas/$id'
-    | '/_authenticated/turmas/nova'
+    | '/_authenticated/notas'
+    | '/_authenticated/perfil'
+    | '/_authenticated/atividades/nova'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -195,18 +172,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/turmas': {
-      id: '/_authenticated/turmas'
-      path: '/turmas'
-      fullPath: '/turmas'
-      preLoaderRoute: typeof AuthenticatedTurmasRouteImport
+    '/_authenticated/perfil': {
+      id: '/_authenticated/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/mentores': {
-      id: '/_authenticated/mentores'
-      path: '/mentores'
-      fullPath: '/mentores'
-      preLoaderRoute: typeof AuthenticatedMentoresRouteImport
+    '/_authenticated/notas': {
+      id: '/_authenticated/notas'
+      path: '/notas'
+      fullPath: '/notas'
+      preLoaderRoute: typeof AuthenticatedNotasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/home': {
@@ -214,13 +191,6 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/conta': {
-      id: '/_authenticated/conta'
-      path: '/conta'
-      fullPath: '/conta'
-      preLoaderRoute: typeof AuthenticatedContaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/calendario': {
@@ -237,72 +207,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAvisosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/turmas/nova': {
-      id: '/_authenticated/turmas/nova'
+    '/_authenticated/atividades': {
+      id: '/_authenticated/atividades'
+      path: '/atividades'
+      fullPath: '/atividades'
+      preLoaderRoute: typeof AuthenticatedAtividadesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/atividades/nova': {
+      id: '/_authenticated/atividades/nova'
       path: '/nova'
-      fullPath: '/turmas/nova'
-      preLoaderRoute: typeof AuthenticatedTurmasNovaRouteImport
-      parentRoute: typeof AuthenticatedTurmasRoute
-    }
-    '/_authenticated/turmas/$id': {
-      id: '/_authenticated/turmas/$id'
-      path: '/$id'
-      fullPath: '/turmas/$id'
-      preLoaderRoute: typeof AuthenticatedTurmasIdRouteImport
-      parentRoute: typeof AuthenticatedTurmasRoute
-    }
-    '/_authenticated/mentores/$id': {
-      id: '/_authenticated/mentores/$id'
-      path: '/$id'
-      fullPath: '/mentores/$id'
-      preLoaderRoute: typeof AuthenticatedMentoresIdRouteImport
-      parentRoute: typeof AuthenticatedMentoresRoute
+      fullPath: '/atividades/nova'
+      preLoaderRoute: typeof AuthenticatedAtividadesNovaRouteImport
+      parentRoute: typeof AuthenticatedAtividadesRoute
     }
   }
 }
 
-interface AuthenticatedMentoresRouteChildren {
-  AuthenticatedMentoresIdRoute: typeof AuthenticatedMentoresIdRoute
+interface AuthenticatedAtividadesRouteChildren {
+  AuthenticatedAtividadesNovaRoute: typeof AuthenticatedAtividadesNovaRoute
 }
 
-const AuthenticatedMentoresRouteChildren: AuthenticatedMentoresRouteChildren = {
-  AuthenticatedMentoresIdRoute: AuthenticatedMentoresIdRoute,
-}
+const AuthenticatedAtividadesRouteChildren: AuthenticatedAtividadesRouteChildren =
+  {
+    AuthenticatedAtividadesNovaRoute: AuthenticatedAtividadesNovaRoute,
+  }
 
-const AuthenticatedMentoresRouteWithChildren =
-  AuthenticatedMentoresRoute._addFileChildren(
-    AuthenticatedMentoresRouteChildren,
+const AuthenticatedAtividadesRouteWithChildren =
+  AuthenticatedAtividadesRoute._addFileChildren(
+    AuthenticatedAtividadesRouteChildren,
   )
 
-interface AuthenticatedTurmasRouteChildren {
-  AuthenticatedTurmasIdRoute: typeof AuthenticatedTurmasIdRoute
-  AuthenticatedTurmasNovaRoute: typeof AuthenticatedTurmasNovaRoute
-}
-
-const AuthenticatedTurmasRouteChildren: AuthenticatedTurmasRouteChildren = {
-  AuthenticatedTurmasIdRoute: AuthenticatedTurmasIdRoute,
-  AuthenticatedTurmasNovaRoute: AuthenticatedTurmasNovaRoute,
-}
-
-const AuthenticatedTurmasRouteWithChildren =
-  AuthenticatedTurmasRoute._addFileChildren(AuthenticatedTurmasRouteChildren)
-
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRouteWithChildren
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedCalendarioRoute: typeof AuthenticatedCalendarioRoute
-  AuthenticatedContaRoute: typeof AuthenticatedContaRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
-  AuthenticatedMentoresRoute: typeof AuthenticatedMentoresRouteWithChildren
-  AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
+  AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
+  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAtividadesRoute: AuthenticatedAtividadesRouteWithChildren,
   AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
   AuthenticatedCalendarioRoute: AuthenticatedCalendarioRoute,
-  AuthenticatedContaRoute: AuthenticatedContaRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
-  AuthenticatedMentoresRoute: AuthenticatedMentoresRouteWithChildren,
-  AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
+  AuthenticatedNotasRoute: AuthenticatedNotasRoute,
+  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -316,3 +267,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
