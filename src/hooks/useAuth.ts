@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
 
-export type AppRole = "aluno" | "mentor";
+export type AppRole = "aluno" | "professor" | "administrador";
 
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
@@ -41,9 +41,15 @@ export function useUserRole() {
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id)
-      .maybeSingle()
       .then(({ data }) => {
-        setRole((data?.role as AppRole) ?? "aluno");
+        const roles = (data ?? []).map((r) => r.role as AppRole);
+        // prioridade: admin > professor > aluno
+        const pick: AppRole = roles.includes("administrador")
+          ? "administrador"
+          : roles.includes("professor")
+          ? "professor"
+          : "aluno";
+        setRole(pick);
         setLoading(false);
       });
   }, [user]);
