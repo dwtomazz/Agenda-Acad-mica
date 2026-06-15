@@ -14,245 +14,377 @@ export type Database = {
   }
   public: {
     Tables: {
-      announcements: {
+      atividade_concluida: {
         Row: {
-          author_id: string
-          body: string
-          class_id: string | null
-          created_at: string
-          id: string
-          title: string
+          aluno_id: string
+          atividade_id: string
+          concluida_em: string
         }
         Insert: {
-          author_id: string
-          body: string
-          class_id?: string | null
-          created_at?: string
-          id?: string
-          title: string
+          aluno_id: string
+          atividade_id: string
+          concluida_em?: string
         }
         Update: {
-          author_id?: string
-          body?: string
-          class_id?: string | null
-          created_at?: string
-          id?: string
-          title?: string
+          aluno_id?: string
+          atividade_id?: string
+          concluida_em?: string
         }
         Relationships: [
           {
-            foreignKeyName: "announcements_class_id_fkey"
-            columns: ["class_id"]
+            foreignKeyName: "atividade_concluida_aluno_id_fkey"
+            columns: ["aluno_id"]
             isOneToOne: false
-            referencedRelation: "classes"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atividade_concluida_atividade_id_fkey"
+            columns: ["atividade_id"]
+            isOneToOne: false
+            referencedRelation: "atividades"
             referencedColumns: ["id"]
           },
         ]
       }
-      assignments: {
+      atividades: {
         Row: {
-          class_id: string
           created_at: string
-          description: string | null
-          due_at: string | null
+          criada_por: string | null
+          descricao: string | null
+          disciplina_id: string | null
           id: string
-          title: string
+          prazo: string | null
+          titulo: string
+          turma_id: string
+          updated_at: string
         }
         Insert: {
-          class_id: string
           created_at?: string
-          description?: string | null
-          due_at?: string | null
+          criada_por?: string | null
+          descricao?: string | null
+          disciplina_id?: string | null
           id?: string
-          title: string
+          prazo?: string | null
+          titulo: string
+          turma_id: string
+          updated_at?: string
         }
         Update: {
-          class_id?: string
           created_at?: string
-          description?: string | null
-          due_at?: string | null
+          criada_por?: string | null
+          descricao?: string | null
+          disciplina_id?: string | null
           id?: string
-          title?: string
+          prazo?: string | null
+          titulo?: string
+          turma_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "assignments_class_id_fkey"
-            columns: ["class_id"]
+            foreignKeyName: "atividades_criada_por_fkey"
+            columns: ["criada_por"]
             isOneToOne: false
-            referencedRelation: "classes"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atividades_disciplina_id_fkey"
+            columns: ["disciplina_id"]
+            isOneToOne: false
+            referencedRelation: "disciplinas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atividades_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
             referencedColumns: ["id"]
           },
         ]
       }
-      class_members: {
+      avisos: {
         Row: {
-          class_id: string
+          conteudo: string
           created_at: string
+          criado_por: string | null
+          escopo: string
           id: string
-          status: Database["public"]["Enums"]["member_status"]
-          user_id: string
+          titulo: string
+          turma_id: string | null
+          updated_at: string
         }
         Insert: {
-          class_id: string
+          conteudo: string
           created_at?: string
+          criado_por?: string | null
+          escopo?: string
           id?: string
-          status?: Database["public"]["Enums"]["member_status"]
-          user_id: string
+          titulo: string
+          turma_id?: string | null
+          updated_at?: string
         }
         Update: {
-          class_id?: string
+          conteudo?: string
           created_at?: string
+          criado_por?: string | null
+          escopo?: string
           id?: string
-          status?: Database["public"]["Enums"]["member_status"]
-          user_id?: string
+          titulo?: string
+          turma_id?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "class_members_class_id_fkey"
-            columns: ["class_id"]
+            foreignKeyName: "avisos_criado_por_fkey"
+            columns: ["criado_por"]
             isOneToOne: false
-            referencedRelation: "classes"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avisos_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
             referencedColumns: ["id"]
           },
         ]
       }
-      classes: {
+      disciplinas: {
         Row: {
-          area: string | null
-          cover_url: string | null
+          codigo: string | null
           created_at: string
-          description: string | null
           id: string
-          mentor_id: string
-          title: string
+          nome: string
+          updated_at: string
         }
         Insert: {
-          area?: string | null
-          cover_url?: string | null
+          codigo?: string | null
           created_at?: string
-          description?: string | null
           id?: string
-          mentor_id: string
-          title: string
+          nome: string
+          updated_at?: string
         }
         Update: {
-          area?: string | null
-          cover_url?: string | null
+          codigo?: string | null
           created_at?: string
-          description?: string | null
           id?: string
-          mentor_id?: string
-          title?: string
+          nome?: string
+          updated_at?: string
         }
         Relationships: []
       }
-      events: {
+      entregas: {
         Row: {
-          class_id: string
-          created_at: string
+          aluno_id: string
+          arquivo_url: string | null
+          atividade_id: string
+          comentario_aluno: string | null
+          comentario_prof: string | null
+          entregue_em: string
           id: string
-          notes: string | null
-          starts_at: string
-          title: string
-          type: Database["public"]["Enums"]["event_type"]
+          nota: number | null
+          updated_at: string
         }
         Insert: {
-          class_id: string
-          created_at?: string
+          aluno_id: string
+          arquivo_url?: string | null
+          atividade_id: string
+          comentario_aluno?: string | null
+          comentario_prof?: string | null
+          entregue_em?: string
           id?: string
-          notes?: string | null
-          starts_at: string
-          title: string
-          type?: Database["public"]["Enums"]["event_type"]
+          nota?: number | null
+          updated_at?: string
         }
         Update: {
-          class_id?: string
-          created_at?: string
+          aluno_id?: string
+          arquivo_url?: string | null
+          atividade_id?: string
+          comentario_aluno?: string | null
+          comentario_prof?: string | null
+          entregue_em?: string
           id?: string
-          notes?: string | null
-          starts_at?: string
-          title?: string
-          type?: Database["public"]["Enums"]["event_type"]
+          nota?: number | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "events_class_id_fkey"
-            columns: ["class_id"]
+            foreignKeyName: "entregas_aluno_id_fkey"
+            columns: ["aluno_id"]
             isOneToOne: false
-            referencedRelation: "classes"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entregas_atividade_id_fkey"
+            columns: ["atividade_id"]
+            isOneToOne: false
+            referencedRelation: "atividades"
             referencedColumns: ["id"]
           },
         ]
       }
-      materials: {
+      eventos: {
         Row: {
-          class_id: string
           created_at: string
-          created_by: string
-          description: string | null
+          criado_por: string | null
+          data: string
+          descricao: string | null
           id: string
-          title: string
-          type: Database["public"]["Enums"]["material_type"]
-          url: string
+          tipo: string
+          titulo: string
+          turma_id: string | null
+          updated_at: string
         }
         Insert: {
-          class_id: string
           created_at?: string
-          created_by: string
-          description?: string | null
+          criado_por?: string | null
+          data: string
+          descricao?: string | null
           id?: string
-          title: string
-          type: Database["public"]["Enums"]["material_type"]
-          url: string
+          tipo?: string
+          titulo: string
+          turma_id?: string | null
+          updated_at?: string
         }
         Update: {
-          class_id?: string
           created_at?: string
-          created_by?: string
-          description?: string | null
+          criado_por?: string | null
+          data?: string
+          descricao?: string | null
           id?: string
-          title?: string
-          type?: Database["public"]["Enums"]["material_type"]
-          url?: string
+          tipo?: string
+          titulo?: string
+          turma_id?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "materials_class_id_fkey"
-            columns: ["class_id"]
+            foreignKeyName: "eventos_criado_por_fkey"
+            columns: ["criado_por"]
             isOneToOne: false
-            referencedRelation: "classes"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eventos_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
             referencedColumns: ["id"]
           },
         ]
       }
-      messages: {
+      frequencias: {
         Row: {
-          body: string
-          class_id: string
+          aluno_id: string
           created_at: string
+          data: string
           id: string
-          user_id: string
+          lancada_por: string | null
+          presente: boolean
+          turma_id: string
         }
         Insert: {
-          body: string
-          class_id: string
+          aluno_id: string
           created_at?: string
+          data: string
           id?: string
-          user_id: string
+          lancada_por?: string | null
+          presente?: boolean
+          turma_id: string
         }
         Update: {
-          body?: string
-          class_id?: string
+          aluno_id?: string
           created_at?: string
+          data?: string
           id?: string
-          user_id?: string
+          lancada_por?: string | null
+          presente?: boolean
+          turma_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "messages_class_id_fkey"
-            columns: ["class_id"]
+            foreignKeyName: "frequencias_aluno_id_fkey"
+            columns: ["aluno_id"]
             isOneToOne: false
-            referencedRelation: "classes"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "frequencias_lancada_por_fkey"
+            columns: ["lancada_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "frequencias_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notas: {
+        Row: {
+          aluno_id: string
+          created_at: string
+          descricao: string
+          id: string
+          lancada_por: string | null
+          peso: number
+          turma_id: string
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          aluno_id: string
+          created_at?: string
+          descricao: string
+          id?: string
+          lancada_por?: string | null
+          peso?: number
+          turma_id: string
+          updated_at?: string
+          valor: number
+        }
+        Update: {
+          aluno_id?: string
+          created_at?: string
+          descricao?: string
+          id?: string
+          lancada_por?: string | null
+          peso?: number
+          turma_id?: string
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notas_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notas_lancada_por_fkey"
+            columns: ["lancada_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notas_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
             referencedColumns: ["id"]
           },
         ]
@@ -260,6 +392,7 @@ export type Database = {
       profiles: {
         Row: {
           area: string | null
+          ativo: boolean
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -268,6 +401,7 @@ export type Database = {
         }
         Insert: {
           area?: string | null
+          ativo?: boolean
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -276,6 +410,7 @@ export type Database = {
         }
         Update: {
           area?: string | null
+          ativo?: boolean
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -284,43 +419,80 @@ export type Database = {
         }
         Relationships: []
       }
-      submissions: {
+      turma_alunos: {
         Row: {
-          assignment_id: string
-          body: string | null
-          feedback: string | null
-          file_url: string | null
-          grade: number | null
-          id: string
-          submitted_at: string
-          user_id: string
+          aluno_id: string
+          created_at: string
+          turma_id: string
         }
         Insert: {
-          assignment_id: string
-          body?: string | null
-          feedback?: string | null
-          file_url?: string | null
-          grade?: number | null
-          id?: string
-          submitted_at?: string
-          user_id: string
+          aluno_id: string
+          created_at?: string
+          turma_id: string
         }
         Update: {
-          assignment_id?: string
-          body?: string | null
-          feedback?: string | null
-          file_url?: string | null
-          grade?: number | null
-          id?: string
-          submitted_at?: string
-          user_id?: string
+          aluno_id?: string
+          created_at?: string
+          turma_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "submissions_assignment_id_fkey"
-            columns: ["assignment_id"]
+            foreignKeyName: "turma_alunos_aluno_id_fkey"
+            columns: ["aluno_id"]
             isOneToOne: false
-            referencedRelation: "assignments"
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "turma_alunos_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      turmas: {
+        Row: {
+          ano: number
+          created_at: string
+          disciplina_id: string | null
+          id: string
+          nome: string
+          professor_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          ano?: number
+          created_at?: string
+          disciplina_id?: string | null
+          id?: string
+          nome: string
+          professor_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ano?: number
+          created_at?: string
+          disciplina_id?: string | null
+          id?: string
+          nome?: string
+          professor_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "turmas_disciplina_id_fkey"
+            columns: ["disciplina_id"]
+            isOneToOne: false
+            referencedRelation: "disciplinas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "turmas_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -348,7 +520,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      assignment_class: { Args: { _assignment_id: string }; Returns: string }
+      entrega_turma: { Args: { _atividade_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -356,17 +528,18 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_class_member: {
-        Args: { _class_id: string; _user_id: string }
+      is_turma_aluno: {
+        Args: { _turma_id: string; _user_id: string }
         Returns: boolean
       }
-      is_class_mentor: {
-        Args: { _class_id: string; _user_id: string }
+      is_turma_professor: {
+        Args: { _turma_id: string; _user_id: string }
         Returns: boolean
       }
+      promote_to_admin: { Args: { _code: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "aluno" | "mentor"
+      app_role: "aluno" | "professor" | "administrador"
       event_type: "aula" | "prova" | "seminario" | "atividade"
       material_type: "arquivo" | "link" | "aula_gravada"
       member_status: "pendente" | "aprovado"
@@ -497,7 +670,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["aluno", "mentor"],
+      app_role: ["aluno", "professor", "administrador"],
       event_type: ["aula", "prova", "seminario", "atividade"],
       material_type: ["arquivo", "link", "aula_gravada"],
       member_status: ["pendente", "aprovado"],
