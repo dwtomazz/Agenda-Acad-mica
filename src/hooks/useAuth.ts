@@ -1,58 +1,61 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import type { Session, User } from "@supabase/supabase-js";
 
 export type AppRole = "aluno" | "professor" | "administrador";
 
-export function useAuth() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+const KEY = "demo_auth";
 
+export type DemoSession = { role: AppRole; name: string } | null;
+
+export function readDemoSession(): DemoSession {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed?.role) return null;
+    return { role: parsed.role as AppRole, name: parsed.name ?? "Usuário Demo" };
+  } catch {
+    return null;
+  }
+}
+
+export function writeDemoSession(s: { role: AppRole; name?: string }) {
+  window.localStorage.setItem(KEY, JSON.stringify({ role: s.role, name: s.name ?? "Usuário Demo" }));
+  window.dispatchEvent(new Event("demo-auth-change"));
+}
+
+export function clearDemoSession() {
+  window.localStorage.removeItem(KEY);
+  window.dispatchEvent(new Event("demo-auth-change"));
+}
+
+function useDemoSession() {
+  const [s, setS] = useState<DemoSession>(() => readDemoSession());
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      setSession(s);
-      setUser(s?.user ?? null);
-    });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setUser(data.session?.user ?? null);
-      setLoading(false);
-    });
-    return () => sub.subscription.unsubscribe();
+    const sync = () => setS(readDemoSession());
+    window.addEventListener("storage", sync);
+    window.addEventListener("demo-auth-change", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("demo-auth-change", sync);
+    };
   }, []);
+  return s;
+}
 
-  return { session, user, loading };
+export function useAuth() {
+  const s = useDemoSession();
+  const user = s
+    ? { id: `demo-${s.role}`, email: `${s.role}@demo.local`, full_name: s.name }
+    : null;
+  return { session: s, user, loading: false };
 }
 
 export function useUserRole() {
-  const { user } = useAuth();
-  const [role, setRole] = useState<AppRole | null>(null);
-  const [loading, setLoading] = useState(true);
+  const s = useDemoSession();
+  return { role: s?.role ?? null, loading: false };
+}
 
-  useEffect(() => {
-    if (!user) {
-      setRole(null);
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .then(({ data }) => {
-        const roles = (data ?? []).map((r) => r.role as AppRole);
-        // prioridade: admin > professor > aluno
-        const pick: AppRole = roles.includes("administrador")
-          ? "administrador"
-          : roles.includes("professor")
-          ? "professor"
-          : "aluno";
-        setRole(pick);
-        setLoading(false);
-      });
-  }, [user]);
-
-  return { role, loading };
+export function signOutDemo() {
+  clearDemoSession();
 }
