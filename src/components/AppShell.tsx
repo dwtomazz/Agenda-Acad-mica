@@ -5,8 +5,7 @@ import {
   BookOpen, ClipboardList, Award, Users, Inbox, Library, BarChart3, Settings, Shield, GraduationCap,
 } from "lucide-react";
 import { Logo } from "./Logo";
-import { useUserRole, type AppRole } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { useUserRole, clearDemoSession, type AppRole } from "@/hooks/useAuth";
 
 type NavItem = { to: string; label: string; icon: any };
 
@@ -81,7 +80,7 @@ export function AppShell({
   const bottom = bottomFor(role);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    clearDemoSession();
     navigate({ to: "/auth", replace: true });
   };
 
