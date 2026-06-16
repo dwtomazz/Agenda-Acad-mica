@@ -1,35 +1,25 @@
-# Login não-funcional (modo demo)
+## Causa
 
-## Objetivo
-Na tela `/auth`, ao selecionar um perfil (Aluno, Professor ou Administrador) e clicar em **Entrar**, o usuário entra direto no sistema, sem precisar de e-mail, senha, código de admin ou cadastro. Toda validação de autenticação real é desligada.
+O login está em **modo demo** (sem autenticação real — só `localStorage.demo_auth`), mas as telas de administrador ainda tentam gravar diretamente no banco. Como não existe um usuário autenticado de verdade, as políticas de segurança do banco bloqueiam qualquer `INSERT`/`UPDATE`/`DELETE` de disciplinas, turmas e avisos — por isso "salvar" não faz nada (ou aparece erro de permissão).
 
-## Alterações
+## Solução
 
-### 1. `src/routes/auth.tsx` — simplificar a tela
-- Manter a tela de seleção de perfil (3 cards).
-- Depois de escolher o perfil, em vez de mostrar formulário de e-mail/senha, mostrar apenas:
-  - Nome do perfil selecionado
-  - Botão grande **Entrar como {perfil}**
-  - Link "← trocar perfil"
-- Ao clicar em Entrar: salvar `{ role, name }` em `localStorage` (chave `demo_auth`) e navegar para `/home`.
-- Remover formulário, Google, signup, código admin, chamadas ao Supabase.
+Manter o modo demo coerente: trocar as gravações dessas telas por um **armazenamento local no próprio navegador** (`localStorage`), do mesmo jeito que o login demo já funciona. Assim o administrador consegue criar, editar e excluir normalmente, sem depender do banco.
 
-### 2. `src/routes/_authenticated/route.tsx` — desligar guard real
-- Trocar a verificação `supabase.auth.getUser()` por leitura de `localStorage.demo_auth`.
-- Se ausente, redirecionar para `/auth`. Sem chamada ao backend.
-- Manter `ssr: false`.
+### Escopo das alterações
 
-### 3. `src/hooks/useAuth.ts` — ler do localStorage
-- `useAuth`: retornar um `user` mock `{ id: "demo-{role}", email: "demo@local" }` com base em `localStorage.demo_auth`. Sem listeners do Supabase.
-- `useUserRole`: retornar o `role` salvo no localStorage (sem consultar `user_roles`).
-- Expor função `signOut()` que limpa o localStorage e redireciona.
+Criar um pequeno utilitário `src/lib/demoStore.ts` com funções `list / create / update / remove` por "coleção" (disciplinas, turmas, avisos), persistidas em `localStorage` com IDs gerados localmente.
 
-### 4. Logout
-- Onde houver botão "Sair" (no `AppShell`/perfil), trocar `supabase.auth.signOut()` por limpar `localStorage.demo_auth` e ir para `/auth`.
+Trocar as chamadas `supabase.from(...)` por esse utilitário em:
 
-## Fora do escopo
-- Não mexer no banco, em RLS, em migrations, nem nas demais telas (continuam usando os dados que já carregam; algumas chamadas ao Supabase podem retornar vazio porque não há sessão real — isso é esperado no modo demo e pode ser tratado depois se você quiser dados fake).
-- Não remover as integrações do Supabase do projeto; apenas a tela de login deixa de usá-las.
+1. `src/routes/_authenticated/admin.disciplinas.tsx` — listar/criar/editar/excluir disciplinas.
+2. `src/routes/_authenticated/admin.turmas.tsx` — listar/criar/editar/excluir turmas (e seleção de disciplina vinda do store local).
+3. `src/routes/_authenticated/admin.comunicados.tsx` — listar/criar/excluir avisos gerais.
+4. `src/routes/_authenticated/avisos.tsx` — leitura passa a ler do store local para que os avisos criados pelo admin apareçam para alunos/professores na mesma sessão/navegador.
+5. `src/routes/_authenticated/turmas.tsx` — leitura passa a usar o store local para que as turmas criadas pelo admin apareçam na lista.
 
-## Observação
-Isso é um modo de demonstração — qualquer pessoa "entra" como qualquer perfil sem segurança. Avise se em algum momento quiser religar o login real.
+Nenhuma alteração no banco e nenhuma mexida em login, layout ou outras telas.
+
+### Limitação esperada
+
+Como é modo demo, os dados ficam **apenas no navegador atual** — não sincronizam entre dispositivos nem entre usuários. É o comportamento coerente com o login demo. Quando quiser ligar o sistema real (login + banco), reativamos a autenticação e voltamos a gravar no banco.

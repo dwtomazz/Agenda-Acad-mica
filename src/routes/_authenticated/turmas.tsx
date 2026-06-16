@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import { Card, Empty } from "@/components/ui-bits";
 import { useAuth, useUserRole } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { demoStore, KEYS } from "@/lib/demoStore";
 import { BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/turmas")({ component: TurmasList });
@@ -15,10 +15,10 @@ function TurmasList() {
     queryKey: ["turmas-list", user?.id, role],
     enabled: !!user,
     queryFn: async () => {
-      let q = supabase.from("turmas").select("id,nome,ano,disciplinas(nome),profiles!turmas_professor_id_fkey(full_name)");
-      if (role === "professor") q = q.eq("professor_id", user!.id);
-      const { data } = await q.order("ano", { ascending: false });
-      return data ?? [];
+      const disc = demoStore.list<any>(KEYS.disciplinas);
+      return demoStore.list<any>(KEYS.turmas)
+        .map((t) => ({ ...t, disciplina_nome: disc.find((d) => d.id === t.disciplina_id)?.nome ?? null }))
+        .sort((a, b) => (b.ano ?? 0) - (a.ano ?? 0));
     },
   });
 
@@ -32,7 +32,7 @@ function TurmasList() {
                 <BookOpen size={20} className="text-primary" />
                 <div className="flex-1">
                   <p className="text-sm font-semibold">{t.nome}</p>
-                  <p className="text-xs text-muted-foreground">{t.disciplinas?.nome ?? "Sem disciplina"} · {t.ano} · prof. {t.profiles?.full_name ?? "—"}</p>
+                  <p className="text-xs text-muted-foreground">{t.disciplina_nome ?? "Sem disciplina"} · {t.ano} · prof. {t.professor_nome ?? "—"}</p>
                 </div>
               </Card>
             </Link>

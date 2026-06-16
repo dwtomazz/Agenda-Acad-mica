@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Card, Empty, Field, PrimaryButton, Modal } from "@/components/ui-bits";
-import { supabase } from "@/integrations/supabase/client";
+import { demoStore, KEYS } from "@/lib/demoStore";
 import { Library, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -14,11 +14,11 @@ function AdminDisc() {
   const [open, setOpen] = useState<any | null>(null);
   const disc = useQuery({
     queryKey: ["disciplinas"],
-    queryFn: async () => (await supabase.from("disciplinas").select("*").order("nome")).data ?? [],
+    queryFn: async () => demoStore.list<any>(KEYS.disciplinas).sort((a, b) => a.nome.localeCompare(b.nome)),
   });
   async function del(id: string) {
     if (!confirm("Excluir disciplina?")) return;
-    await supabase.from("disciplinas").delete().eq("id", id);
+    demoStore.remove(KEYS.disciplinas, id);
     qc.invalidateQueries({ queryKey: ["disciplinas"] });
   }
   return (
@@ -44,12 +44,9 @@ function DiscForm({ disc, onClose }: { disc: any; onClose: () => void }) {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const op = disc.id
-      ? supabase.from("disciplinas").update({ nome, codigo: codigo || null }).eq("id", disc.id)
-      : supabase.from("disciplinas").insert({ nome, codigo: codigo || null });
-    const { error } = await op;
+    if (disc.id) demoStore.update(KEYS.disciplinas, disc.id, { nome, codigo: codigo || null });
+    else demoStore.create(KEYS.disciplinas, { nome, codigo: codigo || null });
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
     toast.success("Salvo"); onClose();
   }
   return (
