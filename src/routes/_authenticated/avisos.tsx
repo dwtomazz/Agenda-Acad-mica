@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Card, Empty, Field, SelectField, PrimaryButton, Modal, Badge } from "@/components/ui-bits";
 import { useAuth, useUserRole } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { demoStore, KEYS } from "@/lib/demoStore";
 import { Plus, Megaphone, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,19 +19,24 @@ function AvisosPage() {
   const avisos = useQuery({
     queryKey: ["avisos"],
     enabled: !!user,
-    queryFn: async () => (await supabase.from("avisos").select("id,titulo,conteudo,escopo,turma_id,criado_por,created_at,turmas(nome),profiles!avisos_criado_por_fkey(full_name)").order("created_at", { ascending: false })).data ?? [],
+    queryFn: async () => {
+      const turmas = demoStore.list<any>(KEYS.turmas);
+      return demoStore.list<any>(KEYS.avisos)
+        .map((a) => ({ ...a, turma_nome: turmas.find((t) => t.id === a.turma_id)?.nome ?? null }))
+        .sort((a, b) => (b.created_at ?? "").localeCompare(a.created_at ?? ""));
+    },
   });
   const minhasTurmas = useQuery({
     queryKey: ["minhas-turmas-avisos", user?.id],
-    enabled: !!user && role === "professor",
-    queryFn: async () => (await supabase.from("turmas").select("id,nome").eq("professor_id", user!.id)).data ?? [],
+    enabled: !!user,
+    queryFn: async () => demoStore.list<any>(KEYS.turmas).map((t) => ({ id: t.id, nome: t.nome })),
   });
 
   const podeCriar = role === "professor" || role === "administrador";
 
   async function del(id: string) {
     if (!confirm("Excluir aviso?")) return;
-    await supabase.from("avisos").delete().eq("id", id);
+    demoStore.remove(KEYS.avisos, id);
     qc.invalidateQueries({ queryKey: ["avisos"] });
   }
 
@@ -49,9 +54,9 @@ function AvisosPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold">{a.titulo}</p>
-                    <Badge tone={a.escopo === "geral" ? "default" : "warn"}>{a.escopo === "geral" ? "Institucional" : a.turmas?.nome ?? "Turma"}</Badge>
+                    <Badge tone={a.escopo === "geral" ? "default" : "warn"}>{a.escopo === "geral" ? "Institucional" : a.turma_nome ?? "Turma"}</Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">{a.profiles?.full_name ?? "—"} · {fmt(a.created_at)}</p>
+                  <p className="text-xs text-muted-foreground">{a.autor ?? "—"} · {fmt(a.created_at)}</p>
                   <p className="mt-2 text-sm whitespace-pre-wrap">{a.conteudo}</p>
                 </div>
                 {(role === "administrador" || a.criado_por === user?.id) && (
@@ -78,13 +83,13 @@ function AvisoModal({ onClose, turmas, role, userId }: { onClose: () => void; tu
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.from("avisos").insert({
+    demoStore.create(KEYS.avisos, {
       titulo, conteudo, escopo,
       turma_id: escopo === "turma" ? turmaId || null : null,
       criado_por: userId,
+      autor: role === "administrador" ? "Administrador" : role === "professor" ? "Professor" : "Aluno",
     });
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
     toast.success("Aviso publicado");
     onClose();
   }
