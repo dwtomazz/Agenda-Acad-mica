@@ -536,7 +536,6 @@ export type Database = {
         Args: { _turma_id: string; _user_id: string }
         Returns: boolean
       }
-      promote_to_admin: { Args: { _code: string }; Returns: boolean }
     }
     Enums: {
       app_role: "aluno" | "professor" | "administrador"
