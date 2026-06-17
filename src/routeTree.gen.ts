@@ -17,6 +17,7 @@ import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedNotasRouteImport } from './routes/_authenticated/notas'
 import { Route as AuthenticatedHorariosRouteImport } from './routes/_authenticated/horarios'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedEntregasRouteImport } from './routes/_authenticated/entregas'
 import { Route as AuthenticatedCalendarioRouteImport } from './routes/_authenticated/calendario'
 import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
@@ -62,6 +63,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEntregasRoute = AuthenticatedEntregasRouteImport.update({
+  id: '/entregas',
+  path: '/entregas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCalendarioRoute = AuthenticatedCalendarioRouteImport.update({
   id: '/calendario',
   path: '/calendario',
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/avisos': typeof AuthenticatedAvisosRoute
   '/calendario': typeof AuthenticatedCalendarioRoute
+  '/entregas': typeof AuthenticatedEntregasRoute
   '/home': typeof AuthenticatedHomeRoute
   '/horarios': typeof AuthenticatedHorariosRoute
   '/notas': typeof AuthenticatedNotasRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/avisos': typeof AuthenticatedAvisosRoute
   '/calendario': typeof AuthenticatedCalendarioRoute
+  '/entregas': typeof AuthenticatedEntregasRoute
   '/home': typeof AuthenticatedHomeRoute
   '/horarios': typeof AuthenticatedHorariosRoute
   '/notas': typeof AuthenticatedNotasRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/_authenticated/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/calendario': typeof AuthenticatedCalendarioRoute
+  '/_authenticated/entregas': typeof AuthenticatedEntregasRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/horarios': typeof AuthenticatedHorariosRoute
   '/_authenticated/notas': typeof AuthenticatedNotasRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/atividades'
     | '/avisos'
     | '/calendario'
+    | '/entregas'
     | '/home'
     | '/horarios'
     | '/notas'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/atividades'
     | '/avisos'
     | '/calendario'
+    | '/entregas'
     | '/home'
     | '/horarios'
     | '/notas'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/_authenticated/atividades'
     | '/_authenticated/avisos'
     | '/_authenticated/calendario'
+    | '/_authenticated/entregas'
     | '/_authenticated/home'
     | '/_authenticated/horarios'
     | '/_authenticated/notas'
@@ -243,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/entregas': {
+      id: '/_authenticated/entregas'
+      path: '/entregas'
+      fullPath: '/entregas'
+      preLoaderRoute: typeof AuthenticatedEntregasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/calendario': {
       id: '/_authenticated/calendario'
       path: '/calendario'
@@ -310,6 +329,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRouteWithChildren
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedCalendarioRoute: typeof AuthenticatedCalendarioRoute
+  AuthenticatedEntregasRoute: typeof AuthenticatedEntregasRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedHorariosRoute: typeof AuthenticatedHorariosRoute
   AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
@@ -321,6 +341,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAtividadesRoute: AuthenticatedAtividadesRouteWithChildren,
   AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
   AuthenticatedCalendarioRoute: AuthenticatedCalendarioRoute,
+  AuthenticatedEntregasRoute: AuthenticatedEntregasRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedHorariosRoute: AuthenticatedHorariosRoute,
   AuthenticatedNotasRoute: AuthenticatedNotasRoute,
