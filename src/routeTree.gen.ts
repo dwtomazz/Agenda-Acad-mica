@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
 import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authenticated/atividades.nova'
 
@@ -35,6 +36,11 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAvisosRoute = AuthenticatedAvisosRouteImport.update({
+  id: '/avisos',
+  path: '/avisos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAtividadesRoute = AuthenticatedAtividadesRouteImport.update({
   id: '/atividades',
   path: '/atividades',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
+  '/avisos': typeof AuthenticatedAvisosRoute
   '/home': typeof AuthenticatedHomeRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
+  '/avisos': typeof AuthenticatedAvisosRoute
   '/home': typeof AuthenticatedHomeRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
@@ -67,20 +75,28 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/atividades': typeof AuthenticatedAtividadesRouteWithChildren
+  '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/atividades' | '/home' | '/atividades/nova'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/atividades'
+    | '/avisos'
+    | '/home'
+    | '/atividades/nova'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/atividades' | '/home' | '/atividades/nova'
+  to: '/' | '/auth' | '/atividades' | '/avisos' | '/home' | '/atividades/nova'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/atividades'
+    | '/_authenticated/avisos'
     | '/_authenticated/home'
     | '/_authenticated/atividades/nova'
   fileRoutesById: FileRoutesById
@@ -121,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/avisos': {
+      id: '/_authenticated/avisos'
+      path: '/avisos'
+      fullPath: '/avisos'
+      preLoaderRoute: typeof AuthenticatedAvisosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/atividades': {
       id: '/_authenticated/atividades'
       path: '/atividades'
@@ -154,11 +177,13 @@ const AuthenticatedAtividadesRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRouteWithChildren
+  AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAtividadesRoute: AuthenticatedAtividadesRouteWithChildren,
+  AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
 }
 
