@@ -23,6 +23,7 @@ import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
 import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
 import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authenticated/atividades.nova'
+import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -94,6 +95,12 @@ const AuthenticatedAtividadesNovaRoute =
     path: '/nova',
     getParentRoute: () => AuthenticatedAtividadesRoute,
   } as any)
+const AuthenticatedAdminUsuariosRoute =
+  AuthenticatedAdminUsuariosRouteImport.update({
+    id: '/admin/usuarios',
+    path: '/admin/usuarios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
   '/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
@@ -122,6 +130,7 @@ export interface FileRoutesByTo {
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
   '/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
@@ -139,6 +148,7 @@ export interface FileRoutesById {
   '/_authenticated/notas': typeof AuthenticatedNotasRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/_authenticated/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
   '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/notas'
     | '/perfil'
     | '/turmas'
+    | '/admin/usuarios'
     | '/atividades/nova'
     | '/turmas/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '/notas'
     | '/perfil'
     | '/turmas'
+    | '/admin/usuarios'
     | '/atividades/nova'
     | '/turmas/$id'
   id:
@@ -187,6 +199,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notas'
     | '/_authenticated/perfil'
     | '/_authenticated/turmas'
+    | '/_authenticated/admin/usuarios'
     | '/_authenticated/atividades/nova'
     | '/_authenticated/turmas/$id'
   fileRoutesById: FileRoutesById
@@ -297,6 +310,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtividadesNovaRouteImport
       parentRoute: typeof AuthenticatedAtividadesRoute
     }
+    '/_authenticated/admin/usuarios': {
+      id: '/_authenticated/admin/usuarios'
+      path: '/admin/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -335,6 +355,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
+  AuthenticatedAdminUsuariosRoute: typeof AuthenticatedAdminUsuariosRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -347,6 +368,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotasRoute: AuthenticatedNotasRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
+  AuthenticatedAdminUsuariosRoute: AuthenticatedAdminUsuariosRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
