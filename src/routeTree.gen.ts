@@ -20,6 +20,7 @@ import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/h
 import { Route as AuthenticatedCalendarioRouteImport } from './routes/_authenticated/calendario'
 import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
+import { Route as AuthenticatedTurmasIdRouteImport } from './routes/_authenticated/turmas.$id'
 import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authenticated/atividades.nova'
 
 const AuthRoute = AuthRouteImport.update({
@@ -76,6 +77,11 @@ const AuthenticatedAtividadesRoute = AuthenticatedAtividadesRouteImport.update({
   path: '/atividades',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTurmasIdRoute = AuthenticatedTurmasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedTurmasRoute,
+} as any)
 const AuthenticatedAtividadesNovaRoute =
   AuthenticatedAtividadesNovaRouteImport.update({
     id: '/nova',
@@ -93,8 +99,9 @@ export interface FileRoutesByFullPath {
   '/horarios': typeof AuthenticatedHorariosRoute
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
-  '/turmas': typeof AuthenticatedTurmasRoute
+  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -106,8 +113,9 @@ export interface FileRoutesByTo {
   '/horarios': typeof AuthenticatedHorariosRoute
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
-  '/turmas': typeof AuthenticatedTurmasRoute
+  '/turmas': typeof AuthenticatedTurmasRouteWithChildren
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
+  '/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,8 +129,9 @@ export interface FileRoutesById {
   '/_authenticated/horarios': typeof AuthenticatedHorariosRoute
   '/_authenticated/notas': typeof AuthenticatedNotasRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
-  '/_authenticated/turmas': typeof AuthenticatedTurmasRoute
+  '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
   '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
+  '/_authenticated/turmas/$id': typeof AuthenticatedTurmasIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/turmas'
     | '/atividades/nova'
+    | '/turmas/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/turmas'
     | '/atividades/nova'
+    | '/turmas/$id'
   id:
     | '__root__'
     | '/'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/_authenticated/perfil'
     | '/_authenticated/turmas'
     | '/_authenticated/atividades/nova'
+    | '/_authenticated/turmas/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -252,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtividadesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/turmas/$id': {
+      id: '/_authenticated/turmas/$id'
+      path: '/$id'
+      fullPath: '/turmas/$id'
+      preLoaderRoute: typeof AuthenticatedTurmasIdRouteImport
+      parentRoute: typeof AuthenticatedTurmasRoute
+    }
     '/_authenticated/atividades/nova': {
       id: '/_authenticated/atividades/nova'
       path: '/nova'
@@ -276,6 +295,17 @@ const AuthenticatedAtividadesRouteWithChildren =
     AuthenticatedAtividadesRouteChildren,
   )
 
+interface AuthenticatedTurmasRouteChildren {
+  AuthenticatedTurmasIdRoute: typeof AuthenticatedTurmasIdRoute
+}
+
+const AuthenticatedTurmasRouteChildren: AuthenticatedTurmasRouteChildren = {
+  AuthenticatedTurmasIdRoute: AuthenticatedTurmasIdRoute,
+}
+
+const AuthenticatedTurmasRouteWithChildren =
+  AuthenticatedTurmasRoute._addFileChildren(AuthenticatedTurmasRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRouteWithChildren
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
@@ -284,7 +314,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHorariosRoute: typeof AuthenticatedHorariosRoute
   AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
-  AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRoute
+  AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -295,7 +325,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHorariosRoute: AuthenticatedHorariosRoute,
   AuthenticatedNotasRoute: AuthenticatedNotasRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
-  AuthenticatedTurmasRoute: AuthenticatedTurmasRoute,
+  AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
