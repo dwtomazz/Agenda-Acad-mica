@@ -26,6 +26,7 @@ import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
 import { Route as AuthenticatedAdminTurmasRouteImport } from './routes/_authenticated/admin.turmas'
 import { Route as AuthenticatedAdminDisciplinasRouteImport } from './routes/_authenticated/admin.disciplinas'
+import { Route as AuthenticatedAdminComunicadosRouteImport } from './routes/_authenticated/admin.comunicados'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -115,6 +116,12 @@ const AuthenticatedAdminDisciplinasRoute =
     path: '/admin/disciplinas',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminComunicadosRoute =
+  AuthenticatedAdminComunicadosRouteImport.update({
+    id: '/admin/comunicados',
+    path: '/admin/comunicados',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/admin/comunicados': typeof AuthenticatedAdminComunicadosRoute
   '/admin/disciplinas': typeof AuthenticatedAdminDisciplinasRoute
   '/admin/turmas': typeof AuthenticatedAdminTurmasRoute
   '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
@@ -146,6 +154,7 @@ export interface FileRoutesByTo {
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/admin/comunicados': typeof AuthenticatedAdminComunicadosRoute
   '/admin/disciplinas': typeof AuthenticatedAdminDisciplinasRoute
   '/admin/turmas': typeof AuthenticatedAdminTurmasRoute
   '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
@@ -166,6 +175,7 @@ export interface FileRoutesById {
   '/_authenticated/notas': typeof AuthenticatedNotasRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/turmas': typeof AuthenticatedTurmasRouteWithChildren
+  '/_authenticated/admin/comunicados': typeof AuthenticatedAdminComunicadosRoute
   '/_authenticated/admin/disciplinas': typeof AuthenticatedAdminDisciplinasRoute
   '/_authenticated/admin/turmas': typeof AuthenticatedAdminTurmasRoute
   '/_authenticated/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/notas'
     | '/perfil'
     | '/turmas'
+    | '/admin/comunicados'
     | '/admin/disciplinas'
     | '/admin/turmas'
     | '/admin/usuarios'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/notas'
     | '/perfil'
     | '/turmas'
+    | '/admin/comunicados'
     | '/admin/disciplinas'
     | '/admin/turmas'
     | '/admin/usuarios'
@@ -223,6 +235,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notas'
     | '/_authenticated/perfil'
     | '/_authenticated/turmas'
+    | '/_authenticated/admin/comunicados'
     | '/_authenticated/admin/disciplinas'
     | '/_authenticated/admin/turmas'
     | '/_authenticated/admin/usuarios'
@@ -357,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDisciplinasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/comunicados': {
+      id: '/_authenticated/admin/comunicados'
+      path: '/admin/comunicados'
+      fullPath: '/admin/comunicados'
+      preLoaderRoute: typeof AuthenticatedAdminComunicadosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -395,6 +415,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRouteWithChildren
+  AuthenticatedAdminComunicadosRoute: typeof AuthenticatedAdminComunicadosRoute
   AuthenticatedAdminDisciplinasRoute: typeof AuthenticatedAdminDisciplinasRoute
   AuthenticatedAdminTurmasRoute: typeof AuthenticatedAdminTurmasRoute
   AuthenticatedAdminUsuariosRoute: typeof AuthenticatedAdminUsuariosRoute
@@ -410,6 +431,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotasRoute: AuthenticatedNotasRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedTurmasRoute: AuthenticatedTurmasRouteWithChildren,
+  AuthenticatedAdminComunicadosRoute: AuthenticatedAdminComunicadosRoute,
   AuthenticatedAdminDisciplinasRoute: AuthenticatedAdminDisciplinasRoute,
   AuthenticatedAdminTurmasRoute: AuthenticatedAdminTurmasRoute,
   AuthenticatedAdminUsuariosRoute: AuthenticatedAdminUsuariosRoute,
