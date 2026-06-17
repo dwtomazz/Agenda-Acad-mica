@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTurmasRouteImport } from './routes/_authenticated/turmas'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
 import { Route as AuthenticatedNotasRouteImport } from './routes/_authenticated/notas'
 import { Route as AuthenticatedHorariosRouteImport } from './routes/_authenticated/horarios'
@@ -34,6 +35,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTurmasRoute = AuthenticatedTurmasRouteImport.update({
+  id: '/turmas',
+  path: '/turmas',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
   id: '/perfil',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/horarios': typeof AuthenticatedHorariosRoute
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/turmas': typeof AuthenticatedTurmasRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRoutesByTo {
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/horarios': typeof AuthenticatedHorariosRoute
   '/notas': typeof AuthenticatedNotasRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/turmas': typeof AuthenticatedTurmasRoute
   '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRoutesById {
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/_authenticated/horarios': typeof AuthenticatedHorariosRoute
   '/_authenticated/notas': typeof AuthenticatedNotasRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/turmas': typeof AuthenticatedTurmasRoute
   '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRouteTypes {
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/horarios'
     | '/notas'
     | '/perfil'
+    | '/turmas'
     | '/atividades/nova'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/horarios'
     | '/notas'
     | '/perfil'
+    | '/turmas'
     | '/atividades/nova'
   id:
     | '__root__'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/_authenticated/horarios'
     | '/_authenticated/notas'
     | '/_authenticated/perfil'
+    | '/_authenticated/turmas'
     | '/_authenticated/atividades/nova'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +195,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/turmas': {
+      id: '/_authenticated/turmas'
+      path: '/turmas'
+      fullPath: '/turmas'
+      preLoaderRoute: typeof AuthenticatedTurmasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/perfil': {
       id: '/_authenticated/perfil'
@@ -265,6 +284,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHorariosRoute: typeof AuthenticatedHorariosRoute
   AuthenticatedNotasRoute: typeof AuthenticatedNotasRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedTurmasRoute: typeof AuthenticatedTurmasRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -275,6 +295,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHorariosRoute: AuthenticatedHorariosRoute,
   AuthenticatedNotasRoute: AuthenticatedNotasRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedTurmasRoute: AuthenticatedTurmasRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
