@@ -2,10 +2,11 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import {
   Home, Megaphone, CalendarDays, Menu, User, ArrowLeft, X, LogOut,
-  BookOpen, ClipboardList, Award, Users, Inbox, Library, BarChart3, Settings, Shield, GraduationCap,
+  BookOpen, ClipboardList, Award, Users, Inbox, Library, BarChart3, Settings, Shield, GraduationCap, Clock,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useUserRole, clearDemoSession, type AppRole } from "@/hooks/useAuth";
+import { NotificationsBell } from "./NotificationsBell";
 
 type NavItem = { to: string; label: string; icon: any };
 
@@ -18,6 +19,7 @@ function menuFor(role: AppRole | null): NavItem[] {
       { to: "/entregas", label: "Entregas", icon: Inbox },
       { to: "/calendario", label: "Calendário", icon: CalendarDays },
       { to: "/avisos", label: "Avisos", icon: Megaphone },
+      { to: "/horarios", label: "Horários", icon: Clock },
       { to: "/perfil", label: "Perfil", icon: User },
     ];
   }
@@ -37,9 +39,11 @@ function menuFor(role: AppRole | null): NavItem[] {
   return [
     { to: "/home", label: "Início", icon: Home },
     { to: "/atividades", label: "Atividades", icon: ClipboardList },
+    { to: "/entregas", label: "Entregas", icon: Inbox },
     { to: "/calendario", label: "Calendário", icon: CalendarDays },
     { to: "/avisos", label: "Avisos", icon: Megaphone },
     { to: "/notas", label: "Notas e Frequência", icon: Award },
+    { to: "/horarios", label: "Horários", icon: Clock },
     { to: "/perfil", label: "Perfil", icon: User },
   ];
 }
@@ -107,9 +111,12 @@ export function AppShell({
               </span>
             )}
           </div>
-          <Link to="/perfil" className="grid h-10 w-10 place-items-center rounded-full ring-1 ring-white/40 text-white hover:bg-white/10">
-            <User size={20} />
-          </Link>
+          <div className="flex items-center gap-1">
+            <NotificationsBell />
+            <Link to="/perfil" className="grid h-10 w-10 place-items-center rounded-full ring-1 ring-white/40 text-white hover:bg-white/10">
+              <User size={20} />
+            </Link>
+          </div>
         </div>
       </header>
 
