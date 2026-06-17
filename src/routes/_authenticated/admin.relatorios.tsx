@@ -1,54 +1,63 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { Card, SectionTitle, Empty, Badge } from "@/components/ui-bits";
-import { supabase } from "@/integrations/supabase/client";
+import { Card, SectionTitle, Empty, Badge, GhostButton } from "@/components/ui-bits";
+import { useDemoList } from "@/hooks/useDemoData";
+import { KEYS, type Usuario, type Turma, type Disciplina, type Atividade } from "@/lib/demoStore";
+import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/relatorios")({ component: Relatorios });
 
+function toCSV(rows: Record<string, any>[]) {
+  if (!rows.length) return "";
+  const cols = Object.keys(rows[0]);
+  const escape = (v: any) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  return [cols.join(","), ...rows.map((r) => cols.map((c) => escape(r[c])).join(","))].join("\n");
+}
+function download(name: string, content: string) {
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = name; a.click();
+  URL.revokeObjectURL(url);
+}
+
 function Relatorios() {
-  const alunos = useQuery({ queryKey: ["rel-alunos"], queryFn: async () => {
-    const { data: ids } = await supabase.from("user_roles").select("user_id").eq("role", "aluno");
-    if (!ids?.length) return [];
-    return (await supabase.from("profiles").select("id,full_name,ativo").in("id", ids.map(i => i.user_id))).data ?? [];
-  }});
-  const profs = useQuery({ queryKey: ["rel-profs"], queryFn: async () => {
-    const { data: ids } = await supabase.from("user_roles").select("user_id").eq("role", "professor");
-    if (!ids?.length) return [];
-    return (await supabase.from("profiles").select("id,full_name").in("id", ids.map(i => i.user_id))).data ?? [];
-  }});
-  const turmas = useQuery({ queryKey: ["rel-turmas"], queryFn: async () => (await supabase.from("turmas").select("id,nome,ano,disciplinas(nome)").order("ano", { ascending: false })).data ?? [] });
-  const ativ = useQuery({ queryKey: ["rel-ativ"], queryFn: async () => (await supabase.from("atividades").select("id,titulo,prazo,turmas(nome)").order("created_at", { ascending: false }).limit(20)).data ?? [] });
+  const usuarios = useDemoList<Usuario>(KEYS.usuarios);
+  const turmas = useDemoList<Turma>(KEYS.turmas);
+  const disc = useDemoList<Disciplina>(KEYS.disciplinas);
+  const ativ = useDemoList<Atividade>(KEYS.atividades);
+  const [aba, setAba] = useState<"alunos" | "professores" | "turmas" | "disciplinas" | "atividades">("alunos");
+
+  const alunos = usuarios.filter((u) => u.perfil === "aluno");
+  const profs = usuarios.filter((u) => u.perfil === "professor");
+
+  const groups: any = {
+    alunos: { label: "Alunos", rows: alunos.map((u) => ({ id: u.id, nome: u.nome, email: u.email, ativo: u.ativo })) },
+    professores: { label: "Professores", rows: profs.map((u) => ({ id: u.id, nome: u.nome, email: u.email, ativo: u.ativo })) },
+    turmas: { label: "Turmas", rows: turmas.map((t) => ({ id: t.id, nome: t.nome, ano: t.ano, periodo: t.periodo, alunos: t.alunos.length, profs: t.professores.length })) },
+    disciplinas: { label: "Disciplinas", rows: disc.map((d) => ({ id: d.id, nome: d.nome, codigo: d.codigo, turma: turmas.find((t) => t.id === d.turma_id)?.nome ?? "—", professor: usuarios.find((u) => u.id === d.professor_id)?.nome ?? "—" })) },
+    atividades: { label: "Atividades", rows: ativ.map((a) => ({ id: a.id, titulo: a.titulo, tipo: a.tipo, prazo: a.prazo, turma: turmas.find((t) => t.id === a.turma_id)?.nome ?? "—" })) },
+  };
+
+  const cur = groups[aba];
 
   return (
     <AppShell title="Relatórios">
-      <section className="mb-5">
-        <SectionTitle action={<Badge>{alunos.data?.length ?? 0}</Badge>}>Alunos</SectionTitle>
-        {alunos.data?.length ? alunos.data.slice(0, 10).map((a) => (
-          <Card key={a.id} className="mb-1 flex items-center justify-between">
-            <p className="text-sm">{a.full_name}</p>
-            <Badge tone={a.ativo ? "ok" : "danger"}>{a.ativo ? "Ativo" : "Inativo"}</Badge>
-          </Card>
-        )) : <Empty>—</Empty>}
-      </section>
-      <section className="mb-5">
-        <SectionTitle action={<Badge>{profs.data?.length ?? 0}</Badge>}>Professores</SectionTitle>
-        {profs.data?.length ? profs.data.map((p) => (
-          <Card key={p.id} className="mb-1"><p className="text-sm">{p.full_name}</p></Card>
-        )) : <Empty>—</Empty>}
-      </section>
-      <section className="mb-5">
-        <SectionTitle action={<Badge>{turmas.data?.length ?? 0}</Badge>}>Turmas</SectionTitle>
-        {turmas.data?.length ? turmas.data.map((t: any) => (
-          <Card key={t.id} className="mb-1"><p className="text-sm">{t.nome} <span className="text-xs text-muted-foreground">· {t.disciplinas?.nome ?? "—"} · {t.ano}</span></p></Card>
-        )) : <Empty>—</Empty>}
-      </section>
-      <section>
-        <SectionTitle action={<Badge>{ativ.data?.length ?? 0}</Badge>}>Atividades recentes</SectionTitle>
-        {ativ.data?.length ? ativ.data.map((a: any) => (
-          <Card key={a.id} className="mb-1"><p className="text-sm">{a.titulo} <span className="text-xs text-muted-foreground">· {a.turmas?.nome}</span></p></Card>
-        )) : <Empty>—</Empty>}
-      </section>
+      <div className="mb-3 flex gap-2 overflow-x-auto">
+        {Object.entries(groups).map(([k, g]: any) => (
+          <button key={k} onClick={() => setAba(k as any)} className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${aba === k ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>{g.label} ({g.rows.length})</button>
+        ))}
+      </div>
+
+      <div className="mb-3"><GhostButton onClick={() => download(`${aba}.csv`, toCSV(cur.rows))}><Download size={14}/> Baixar CSV</GhostButton></div>
+
+      <SectionTitle action={<Badge>{cur.rows.length}</Badge>}>{cur.label}</SectionTitle>
+      {cur.rows.length ? cur.rows.map((r: any) => (
+        <Card key={r.id} className="mb-1">
+          <p className="text-sm font-semibold">{r.nome ?? r.titulo}</p>
+          <p className="text-xs text-muted-foreground">{Object.entries(r).filter(([k]) => !["id", "nome", "titulo"].includes(k)).map(([k, v]) => `${k}: ${v}`).join(" · ")}</p>
+        </Card>
+      )) : <Empty>—</Empty>}
     </AppShell>
   );
 }

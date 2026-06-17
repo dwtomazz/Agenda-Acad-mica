@@ -1,11 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { AppShell } from "@/components/AppShell";
 import { Card, Field, SelectField, PrimaryButton } from "@/components/ui-bits";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { useDemoUser, useMinhasTurmas, useDemoList } from "@/hooks/useDemoData";
+import { demoStore, KEYS, notificar, type Atividade, type Disciplina, type Turma } from "@/lib/demoStore";
 import { toast } from "sonner";
 
 const search = z.object({ id: z.string().optional() });
@@ -17,54 +16,51 @@ export const Route = createFileRoute("/_authenticated/atividades/nova")({
 
 function NovaAtividade() {
   const { id } = Route.useSearch();
-  const { user } = useAuth();
+  const me = useDemoUser();
   const navigate = useNavigate();
+  const minhas = useMinhasTurmas();
+  const todasTurmas = useDemoList<Turma>(KEYS.turmas);
+  const disciplinas = useDemoList<Disciplina>(KEYS.disciplinas);
+
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [prazo, setPrazo] = useState("");
   const [turmaId, setTurmaId] = useState("");
-  const [disciplinaId, setDisciplinaId] = useState("");
+  const [discId, setDiscId] = useState("");
+  const [tipo, setTipo] = useState<Atividade["tipo"]>("exercicio");
   const [loading, setLoading] = useState(false);
 
-  const turmas = useQuery({
-    queryKey: ["minhas-turmas", user?.id],
-    enabled: !!user,
-    queryFn: async () => {
-      const { data } = await supabase.from("turmas").select("id,nome,disciplina_id");
-      return data ?? [];
-    },
-  });
-  const disciplinas = useQuery({
-    queryKey: ["disciplinas"],
-    queryFn: async () => (await supabase.from("disciplinas").select("id,nome")).data ?? [],
-  });
+  const turmasOpts = me?.perfil === "administrador" ? todasTurmas : minhas;
 
   useEffect(() => {
     if (!id) return;
-    supabase.from("atividades").select("*").eq("id", id).maybeSingle().then(({ data }) => {
-      if (!data) return;
-      setTitulo(data.titulo); setDescricao(data.descricao ?? "");
-      setPrazo(data.prazo ? data.prazo.slice(0, 16) : "");
-      setTurmaId(data.turma_id); setDisciplinaId(data.disciplina_id ?? "");
-    });
+    const a = demoStore.get<Atividade>(KEYS.atividades, id);
+    if (!a) return;
+    setTitulo(a.titulo); setDescricao(a.descricao);
+    setPrazo(a.prazo ? a.prazo.slice(0, 16) : "");
+    setTurmaId(a.turma_id); setDiscId(a.disciplina_id ?? ""); setTipo(a.tipo);
   }, [id]);
 
-  async function submit(e: React.FormEvent) {
+  const discOpts = useMemo(() => disciplinas.filter((d) => !turmaId || d.turma_id === turmaId), [disciplinas, turmaId]);
+
+  function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!me) return;
     setLoading(true);
     const payload = {
-      titulo, descricao: descricao || null,
-      prazo: prazo ? new Date(prazo).toISOString() : null,
-      turma_id: turmaId, disciplina_id: disciplinaId || null,
-      criada_por: user!.id,
+      titulo, descricao, prazo: new Date(prazo).toISOString(),
+      turma_id: turmaId, disciplina_id: discId || null, tipo, criada_por: me.id,
     };
-    const op = id
-      ? supabase.from("atividades").update(payload).eq("id", id)
-      : supabase.from("atividades").insert(payload);
-    const { error } = await op;
+    if (id) {
+      demoStore.update(KEYS.atividades, id, payload);
+    } else {
+      const a = demoStore.create<Atividade>(KEYS.atividades, payload as any);
+      // notifica alunos da turma
+      const t = demoStore.get<Turma>(KEYS.turmas, turmaId);
+      if (t) notificar(t.alunos, { titulo: "Nova atividade", mensagem: a.titulo, tipo: "atividade", link: "/atividades" });
+    }
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success(id ? "Atualizada" : "Atividade criada");
+    toast.success(id ? "Atividade atualizada" : "Atividade criada");
     navigate({ to: "/atividades" });
   }
 
@@ -74,9 +70,15 @@ function NovaAtividade() {
         <form onSubmit={submit} className="space-y-3">
           <Field label="Título" value={titulo} onChange={setTitulo} required />
           <Field label="Descrição" value={descricao} onChange={setDescricao} rows={3} />
-          <Field label="Prazo" value={prazo} onChange={setPrazo} type="datetime-local" />
-          <SelectField label="Turma" value={turmaId} onChange={setTurmaId} required options={(turmas.data ?? []).map((t) => ({ value: t.id, label: t.nome }))} />
-          <SelectField label="Disciplina" value={disciplinaId} onChange={setDisciplinaId} options={(disciplinas.data ?? []).map((d) => ({ value: d.id, label: d.nome }))} />
+          <Field label="Prazo" value={prazo} onChange={setPrazo} type="datetime-local" required />
+          <SelectField label="Turma" value={turmaId} onChange={setTurmaId} required options={turmasOpts.map((t) => ({ value: t.id, label: t.nome }))} />
+          <SelectField label="Disciplina" value={discId} onChange={setDiscId} options={discOpts.map((d) => ({ value: d.id, label: d.nome }))} />
+          <SelectField label="Tipo" value={tipo} onChange={(v) => setTipo(v as any)} required options={[
+            { value: "exercicio", label: "Exercício" },
+            { value: "trabalho", label: "Trabalho" },
+            { value: "prova", label: "Prova" },
+            { value: "seminario", label: "Seminário" },
+          ]} />
           <PrimaryButton type="submit" loading={loading}>{id ? "Salvar" : "Criar"}</PrimaryButton>
         </form>
       </Card>
