@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedAtividadesRouteImport } from './routes/_authenticated/atividades'
+import { Route as AuthenticatedAtividadesNovaRouteImport } from './routes/_authenticated/atividades.nova'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -39,32 +40,41 @@ const AuthenticatedAtividadesRoute = AuthenticatedAtividadesRouteImport.update({
   path: '/atividades',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAtividadesNovaRoute =
+  AuthenticatedAtividadesNovaRouteImport.update({
+    id: '/nova',
+    path: '/nova',
+    getParentRoute: () => AuthenticatedAtividadesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/atividades': typeof AuthenticatedAtividadesRoute
+  '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/home': typeof AuthenticatedHomeRoute
+  '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/atividades': typeof AuthenticatedAtividadesRoute
+  '/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/home': typeof AuthenticatedHomeRoute
+  '/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/atividades': typeof AuthenticatedAtividadesRoute
+  '/_authenticated/atividades': typeof AuthenticatedAtividadesRouteWithChildren
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/atividades/nova': typeof AuthenticatedAtividadesNovaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/atividades' | '/home'
+  fullPaths: '/' | '/auth' | '/atividades' | '/home' | '/atividades/nova'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/atividades' | '/home'
+  to: '/' | '/auth' | '/atividades' | '/home' | '/atividades/nova'
   id:
     | '__root__'
     | '/'
@@ -72,6 +82,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/atividades'
     | '/_authenticated/home'
+    | '/_authenticated/atividades/nova'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,16 +128,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtividadesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/atividades/nova': {
+      id: '/_authenticated/atividades/nova'
+      path: '/nova'
+      fullPath: '/atividades/nova'
+      preLoaderRoute: typeof AuthenticatedAtividadesNovaRouteImport
+      parentRoute: typeof AuthenticatedAtividadesRoute
+    }
   }
 }
 
+interface AuthenticatedAtividadesRouteChildren {
+  AuthenticatedAtividadesNovaRoute: typeof AuthenticatedAtividadesNovaRoute
+}
+
+const AuthenticatedAtividadesRouteChildren: AuthenticatedAtividadesRouteChildren =
+  {
+    AuthenticatedAtividadesNovaRoute: AuthenticatedAtividadesNovaRoute,
+  }
+
+const AuthenticatedAtividadesRouteWithChildren =
+  AuthenticatedAtividadesRoute._addFileChildren(
+    AuthenticatedAtividadesRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRoute
+  AuthenticatedAtividadesRoute: typeof AuthenticatedAtividadesRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAtividadesRoute: AuthenticatedAtividadesRoute,
+  AuthenticatedAtividadesRoute: AuthenticatedAtividadesRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
 }
 
